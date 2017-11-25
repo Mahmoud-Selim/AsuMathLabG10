@@ -9,7 +9,6 @@
 #include <stdio.h>
 #include <iostream>
 #include <iomanip>
-#include <stdlib.h>
 #include <math.h>
 	CMatrix::CMatrix()
 	{
@@ -27,14 +26,6 @@
 		{
 			matrix_ptr[i] = new double [columnsNumber];
 		}
-	}
-	void CMatrix::setRowsNumber(unsigned long rowsNumber)
-	{
-		this->rowsNumber = rowsNumber;
-	}
-	void CMatrix::setColumnsNumber(unsigned long columnsNumber)
-	{
-		this->columnsNumber = columnsNumber;
 	}
 
 	double** CMatrix::createMatrix(unsigned int nR , unsigned int nC)
@@ -519,7 +510,7 @@
 
 	}
 
-	void CMatrix::destroyMatrix()
+	CMatrix::~CMatrix(void)
 	{
 		if(matrix_ptr != NULL)
 		{
@@ -529,11 +520,6 @@
 			}
 			delete[] matrix_ptr;
 		}
-	}
-
-	CMatrix::~CMatrix(void)
-	{
-		destroyMatrix();
 	}
 
 	void CMatrix::printMatrix(void)
@@ -566,6 +552,8 @@
 			}
 		}
 	}
+
+
 
 
 
