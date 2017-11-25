@@ -9,6 +9,7 @@
 #include <stdio.h>
 #include <iostream>
 #include <iomanip>
+#include <math.h>
 	CMatrix::CMatrix()
 	{
 		rowsNumber    = 0;
@@ -203,92 +204,93 @@
 			throw("Error invalid operand dimensions");
 			return;
 		}
-           // operand1_ptr->printMatrix();
-            //operand2_ptr->printMatrix();
-			unsigned long l,k,r,c;
-	       double temp, t;
-	       short flag = 0;
-			double** p1 = (*operand1_ptr).matrix_ptr;
-			double** p2old = (*operand2_ptr).matrix_ptr;
-	        CMatrix INV(operand2_ptr->rowsNumber,operand2_ptr->columnsNumber);
-	        double ** b = INV.getMatrixPtr();
-	        CMatrix p2new(operand2_ptr->rowsNumber,operand2_ptr->columnsNumber);
-	        p2new.copy(operand2_ptr);
-	        double ** p2 = p2new.getMatrixPtr();
 
-	           /////constrains/////
-	       if((operand2_ptr->columnsNumber!=operand2_ptr->rowsNumber) || (operand1_ptr->columnsNumber!=operand2_ptr->rowsNumber)){
-	       printf("Can't divide these two Matrices -_- \n");
-	       //exit(0);
-	      }
-	       ///////////////////Calculating Inverse (B^-1)//////////////////////////
+	    int i,j,k,n = operand2_ptr->rowsNumber,pivotMaxIndex;
+	    CMatrix INV(n,n);
+	    double d;
+	    double** a ;
+	    a = new double* [(2*n)];
+	    for(i = 0 ; i < (2*n) ; i++)
+	    {
+	    	a[i] = new double [(2*n)];
+	    }
+	    for(i=0;i<n;i++)
+	        for(j=0;j<n;j++)
+	            a[i][j] = operand2_ptr->matrix_ptr[i][j];
 
-	       for (r = 0; r<operand2_ptr->rowsNumber; r++){
-	       for (c=r; c<operand2_ptr->columnsNumber; c++){
-	           b[r][c]= (r==c)?1.0:0;
-	       }
-	       }
 
-	   for(r=0; r<operand2_ptr->rowsNumber; r++){
-	   for (c=r; c<operand2_ptr->columnsNumber; c++){
+	    for(i=0;i<n;i++)
+	        for(j=n;j<2*n;j++)
+	            if(j==(i+n))
+	                a[i][j]=1;
+	            else
+	            	a[i][j] = 0;
+	    /********** reducing to diagonal  matrix ***********/
+	    for(i=0;i<n;i++)
+	    {
+	    	pivotMaxIndex = i;
+	    	for(j = i+1 ; j < n ; j++)
+	    	{
+	    		if(fabs(a[j][i]) > fabs(a[pivotMaxIndex][i]))
+	    		{
+	    			pivotMaxIndex = j;
+	    		}
+	    	}
+	    	for(j = 0 ; j < 2*n ; j++)
+	    	{
+	    		double temp = a[pivotMaxIndex][j];
+	    		a[pivotMaxIndex][j] = a[i][j];
+	    		a[i][j] = temp;
+	    	}
+	    	/****************makin zeros obove and below pivot element*********************/
+	        for(j=0;j<n*2;j++)
+	        if(j!=i)
+	        {
+	            d=a[j][i]/a[i][i];
+	            for(k=0;k<n*2;k++)
+	                a[j][k]-=a[i][k]*d;
+	        }
+	    /************** reducing to unit matrix *************/
+	    	d=a[i][i];
+	        for(j=0;j<n*2;j++)
+	            a[i][j]=a[i][j]/d;
+	    }
 
-	       if( p2[r][r] == 0.0 ){        ///Swaping if element = zero
-	            for(k=r+1; k<operand2_ptr->rowsNumber; ++k){
-	           if( p2[k][r] != 0.0 ){
-	               for(unsigned long c=0; c<operand2_ptr->rowsNumber; ++c)
-	               {
-	                       temp = p2[r][c];
-	                   p2[r][c] = p2[k][c];
-	                   p2[k][c] = temp;
-	               }
-	                               for(unsigned long c=0; c<operand2_ptr->rowsNumber; ++c)
-	               {
-	                       temp = b[r][c];
-	                   b[r][c] = b[k][c];
-	                   b[k][c] = temp;
-	               }
-	                               break;
-	                           }
-	                       }
-	                   }
-	           //////////////Elementary Row Operations//////////
-	       if (p2[c][r] != 0.0){
-	           t = 1.0/p2[r][r];
-	           for (k = 0; k<operand2_ptr->rowsNumber; k++){
-	               p2[r][k] *= t;
-	               b[r][k] *= t;
-	           }
-	           for (l = 0; l<operand2_ptr->rowsNumber; l++){
-	               if (l != r){
-	                   t = -p2[l][r];
-	                   for (k = 0; k<operand2_ptr->rowsNumber; k++){
-	                       p2[l][k] = p2[l][k] + t*p2[r][k];
-	                       b[l][k] = b[l][k] + t*b[r][k];
-	                   }
-	               }
-	          }
-	       }
-	   }
-	}
-        //INV.printMatrix();
-	   for (int i= 0 ; i < operand1_ptr->rowsNumber ; i++)
-	   {
-		   flag = 0;
-		   for (int j = 0 ; j < operand2_ptr->rowsNumber ; j++)
-		   {
-			   if (p2[i][j] != 0)
-			   {
-				   flag = 1;
-				   break;
-			   }
-		   }
-		   if (flag == 0)
-		   {
-			   throw("Error,can't divide by a singular matrix ");
-			   return;
-		   }
-	   }
-	/////////////Multipling B^-1 with A ////////////
+	/*    for (i = 0 ; i <= 6 ;i++)
+	     {
+	     	for(j = 0; j <= 6 ; j++)
+	     	{
+	     		cout<<a[i][j]<<"	";
+	     	}
+	     	cout<<endl;
+
+	     }*/
+
+
+/*	    std::cout<<"your solutions: "<<std::endl;
+	    for(i=0;i<n;i++)
+	    {
+	        for(j=n;j<n*2;j++)
+	            std::cout<<a[i][j]<<"    ";
+	        std::cout<<std::endl;
+	    }*/
+	    double** inv_matrix_ptr = INV.matrix_ptr;
+	    for (i = 0 ; i < n ; i ++)
+	    {
+	    	for (j = n; j <n*2 ; j++)
+	    	{
+	    		inv_matrix_ptr[i][j-n] = a[i][j];
+	    	}
+	    }
+
+	    for(i = 0 ; i < n ; i++)
+	    {
+	    	delete [] a[i];
+	    }
+	    delete [] a;
+
+
+		/////////////Multipling B^-1 with A ////////////
 	   multiply( operand1_ptr , &INV);
 }
 
@@ -550,6 +552,12 @@
 			}
 		}
 	}
+
+
+
+
+
+
 
 
 
