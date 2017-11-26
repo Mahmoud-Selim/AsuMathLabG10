@@ -34,7 +34,7 @@ Repository already contain files for testing (bigexample.m) (example.m)
 these commands will test basic  operations in example.m and print result 
 
 ```
- make matrix 
+ make 
 ./matrix ./example.m
  make clean
 ```
