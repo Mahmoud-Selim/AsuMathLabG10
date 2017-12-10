@@ -10,7 +10,7 @@
 
 enum
 {
-	NoOperation,addition,subtraction,multiplication,division,transpose,elementWiseDivision
+	NoOperation,addition,subtraction,multiplication,division,transpose,elementWiseDivision,elementWisePower
 };
 enum
 {
@@ -108,7 +108,25 @@ public:
 	 * -It divides operand1 by operand2,and puts the result in the calling object Matrix.
 	 */
 	void divide(CMatrix* , CMatrix*);
-
+	
+    	/*
+    	 * -parameters :1 pointer to matrix class and the power value.
+     	 * -Return type: void.
+     	 * -A function that takes 1 pointer to the CMatrix class, it is
+	 *   operand1 and the power value.
+     	 * -It makes individual items power.
+     	 * */
+    	void elementwisepower(CMatrix* operand1_ptr ,double value);
+	
+	/*
+	 * -Parameters  : 2 pointers to the matrix class.
+	 * -Return type : void.
+	 * -A function that takes 2 pointers to the CMatrix class, the first one is
+	 *   operand1,and the second one is operand2.
+	 * -It raise every element in operand1 to the power of the corresponding element in operand2,and puts the result in the calling object Matrix.
+	 */
+    	void elementwisepower(CMatrix* operand1_ptr ,CMatrix* operand2_ptr);
+	
 	/*
 	 * -Parameters  : 1 pointers to the matrix class.
 	 * -Return type : void.
