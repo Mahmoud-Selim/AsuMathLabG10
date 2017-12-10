@@ -293,7 +293,25 @@
 		/////////////Multipling B^-1 with A ////////////
 	   multiply( operand1_ptr , &INV);
 }
+    void CMatrix::elementwisepower(CMatrix* operand1_ptr ,double value)
+    {
+        double** p1 = (*operand1_ptr).matrix_ptr;
+        for(unsigned int i=0;i<operand1_ptr->rowsNumber;i++)
+            for(unsigned int j=0;j<operand1_ptr->columnsNumber;j++)
+                matrix_ptr[i][j]=pow(p1[i][j],value);
 
+    }
+    void CMatrix::elementwisepower(CMatrix* operand1_ptr ,CMatrix* operand2_ptr)
+    {
+		if((operand1_ptr->columnsNumber != operand2_ptr->rowsNumber)||(operand2_ptr->columnsNumber != operand1_ptr->rowsNumber))
+		{
+			throw("Error invalid operand dimensions");
+			return;
+		}
+        for(unsigned int i=0;i<operand1_ptr->rowsNumber;i++)
+            for(unsigned int j=0;j<operand1_ptr->columnsNumber;j++)
+                matrix_ptr[i][j]=pow(operand1_ptr->matrix_ptr[i][j],operand2_ptr->matrix_ptr[i][j]);
+    }
 
 	void CMatrix::transpose(CMatrix* operand_ptr)
 	{
