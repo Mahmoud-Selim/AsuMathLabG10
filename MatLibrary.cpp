@@ -302,7 +302,7 @@
         int valueINT = value;
     if((operand1_ptr->rowsNumber==1)&&(operand1_ptr->columnsNumber==1)&&(value-valueINT))
     {
-            printf("d5l fl fn\n");
+           
         matrix_ptr[0][0]=pow(operand1_ptr->matrix_ptr[0][0],value);
             
     }
