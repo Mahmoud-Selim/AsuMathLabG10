@@ -106,14 +106,14 @@ CMatrix* createAndEvaluate (string s)
 	if (operand2[0] == '-')
 	{
 		i++;
-		operand2Value = -1.0 * ( (double) atof(operand1.substr(i).c_str()) );
+		operand2Value = -1.0 * ( (double) atof(operand2.substr(i).c_str()) );
 		operandValueFlag = 1;
 	}
 	if (operand2[i] >= '0' && operand2[i] <= '9')
 	{
 		if (operandState == Operand1)
 		{
-//			operandState == Both;
+			operandState = Both;
 			i = 0;
 		}
 		else
@@ -171,6 +171,7 @@ CMatrix* createAndEvaluate (string s)
 				result_ptr->divide(operand1_ptr , operand2_ptr);
 				break;
 
+
 			case transpose:
 				rowsNumber    = operand1_ptr->getColumnsNumber();
 				columnsNumber = operand1_ptr->getRowsNumber();
@@ -182,6 +183,12 @@ CMatrix* createAndEvaluate (string s)
 				columnsNumber = operand1_ptr->getColumnsNumber();
 				result_ptr = INSERT(ID , rowsNumber ,columnsNumber);
 				result_ptr->elementWiseDivide(operand1_ptr , operand2_ptr);
+				break;
+			case elementWisePower:
+				rowsNumber    = operand1_ptr->getRowsNumber();
+				columnsNumber = operand1_ptr->getColumnsNumber();
+				result_ptr = INSERT(ID , rowsNumber ,columnsNumber);
+				result_ptr->elementwisepower(operand1_ptr , operand2_ptr);
 				break;
 		}
 	}
@@ -199,11 +206,28 @@ CMatrix* createAndEvaluate (string s)
 		{
 			case elementWiseDivision:
 				result_ptr->elementWiseDivide(operand1_ptr , operand2Value , operationMode);
+				break;
+
+			case elementWisePower:
+				result_ptr->elementwisepower(operand1_ptr , operand2Value);
+				break;
+                
+            case Power:
+                 result_ptr->power(operand1_ptr , operand2Value );
+                 break;
 		}
 	}
 	else if (operandState == Both)
 	{
-
+		int operation = getOperation(s);
+		unsigned long rowsNumber    = 1;
+		unsigned long columnsNumber = 1;
+		result_ptr = INSERT(ID , rowsNumber ,columnsNumber);
+		switch (operation)
+        {
+            case Power:
+                 result_ptr->power(operand1Value , operand2Value );
+        }
 	}
 	return result_ptr;
 }
@@ -243,7 +267,7 @@ void Evaluate (string s)
 	if (operand2[0] == '-')
 	{
 		i++;
-		operand2Value = -1.0 * ( (double) atof(operand1.substr(i).c_str()) );
+		operand2Value = -1.0 * ( (double) atof(operand2.substr(i).c_str()) );
 		operandValueFlag = 1;
 	}
 	if (operand2[i] >= '0' && operand2[i] <= '9')
@@ -297,6 +321,9 @@ void Evaluate (string s)
 			case elementWiseDivision:
 				result_ptr->elementWiseDivide(operand1_ptr , operand2_ptr);
 				break;
+			case elementWisePower:
+				result_ptr->elementwisepower(operand1_ptr , operand2_ptr);
+				break;
 		}
 	}
 	else if (operandState == Operand1)
@@ -309,12 +336,24 @@ void Evaluate (string s)
 		switch (operation)
 		{
 			case elementWiseDivision:
-				result_ptr->elementWiseDivide(operand1_ptr , operand2Value , operationMode);
+				 result_ptr->elementWiseDivide(operand1_ptr , operand2Value , operationMode);
+                break;
+            case elementWisePower:
+                 result_ptr->elementwisepower(operand1_ptr , operand2Value );
+                 break;
+            case Power:
+                 result_ptr->power(operand1_ptr , operand2Value );
+                 break;
 		}
 	}
 	else if (operandState == Both)
 	{
-
+          int operation = getOperation(s);
+		switch (operation)
+        {
+            case Power:
+                 result_ptr->power(operand1Value , operand2Value );
+        }
 	}
 }
 void startOperation(string s)
