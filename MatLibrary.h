@@ -10,7 +10,7 @@
 
 enum
 {
-	NoOperation,addition,subtraction,multiplication,division,transpose,elementWiseDivision,elementWisePower
+	NoOperation,addition,subtraction,multiplication,division,transpose,elementWiseDivision,elementWisePower,Power,squareRoot
 };
 enum
 {
@@ -108,25 +108,38 @@ public:
 	 * -It divides operand1 by operand2,and puts the result in the calling object Matrix.
 	 */
 	void divide(CMatrix* , CMatrix*);
-	
-    	/*
-    	 * -parameters :1 pointer to matrix class and the power value.
-     	 * -Return type: void.
-     	 * -A function that takes 1 pointer to the CMatrix class, it is
+    /*
+     * -parameters :1 pointer to matrix class and the power value.
+     * -Return type: void.
+     * -A function that takes 1 pointer to the CMatrix class, it is
 	 *   operand1 and the power value.
-     	 * -It makes individual items power.
-     	 * */
-    	void elementwisepower(CMatrix* operand1_ptr ,double value);
-	
+     * -It makes whole matrix power.
+     * */
+    void power(CMatrix* operand1_ptr ,double value);
+    /*
+     * -parameters : value it's type double and the power value.
+     * -Return type: void.
+     * -A function that takes value it's type double and 
+	 *  the power value.
+     * -It makes  power for value.
+     * */
+    void power(double operandV,double value2);
+    /*
+     * -parameters :1 pointer to matrix class and the power value.
+     * -Return type: void.
+     * -A function that takes 1 pointer to the CMatrix class, it is
+	 *   operand1 and the power value.
+     * -It makes individual items power.
+     * */
+    void elementwisepower(CMatrix* operand1_ptr ,double value);
 	/*
 	 * -Parameters  : 2 pointers to the matrix class.
 	 * -Return type : void.
 	 * -A function that takes 2 pointers to the CMatrix class, the first one is
 	 *   operand1,and the second one is operand2.
-	 * -It raise every element in operand1 to the power of the corresponding element in operand2,and puts the result in the calling object Matrix.
+	 * -It powers every element in operand1 by the corresponding element in operand2,and puts the result in the calling object Matrix.
 	 */
-    	void elementwisepower(CMatrix* operand1_ptr ,CMatrix* operand2_ptr);
-	
+    void elementwisepower(CMatrix* operand1_ptr ,CMatrix* operand2_ptr);
 	/*
 	 * -Parameters  : 1 pointers to the matrix class.
 	 * -Return type : void.
