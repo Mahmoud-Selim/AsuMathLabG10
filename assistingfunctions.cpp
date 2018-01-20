@@ -85,8 +85,23 @@ CMatrix* createAndEvaluate (string s)
 	double operand1Value,operand2Value;
 	string ID = getID(s);
 	CMatrix* result_ptr;
-	string operand1 = getOperand1(s);
-	string operand2 = getOperand2(s);
+    string operand1 , operand2;
+    int j = s.find("(");
+    int k = s.find("sqrt");
+	if(j>0)
+    {
+        operand1 = getOperand1Bracket(s);
+        std::cout<<std::endl<<" "<<operand1<<std::endl;
+        if(k)
+            operand2 = "0.5";
+        else
+            operand2 = getOperand2(s);
+    }
+    else
+    {
+        operand1 = getOperand1(s);
+    	operand2 = getOperand2(s);
+    }
 	if (operand1[0] == '-')
 	{
 		i++;
@@ -215,6 +230,9 @@ CMatrix* createAndEvaluate (string s)
             case Power:
                  result_ptr->power(operand1_ptr , operand2Value );
                  break;
+			case squareRoot:
+				result_ptr->elementwisepower(operand1_ptr , operand2Value);
+				break;
 		}
 	}
 	else if (operandState == Both)
@@ -245,8 +263,24 @@ void Evaluate (string s)
 	unsigned long i = 0, operandState = None , operationMode , operandValueFlag = 0;
 	double operand1Value,operand2Value;
 	string ID = getID(s);
-	string operand1 = getOperand1(s);
-	string operand2 = getOperand2(s);
+	string operand1 , operand2;
+    int j = s.find("(");
+    int k = s.find("sqrt");
+	if(j>0)
+    {
+        operand1 = getOperand1Bracket(s);
+        
+        if(k>0)
+            operand2 = "0.5";
+        else
+            operand2 = getOperand2(s);
+    }
+    else
+    {
+        operand1 = getOperand1(s);
+    	operand2 = getOperand2(s);
+    }
+
 	CMatrix* result_ptr = ISEXISTING(ID);
 	if (operand1[0] == '-')
 	{
@@ -343,6 +377,9 @@ void Evaluate (string s)
                  break;
             case Power:
                  result_ptr->power(operand1_ptr , operand2Value );
+                 break;
+            case squareRoot:
+                 result_ptr->elementwisepower(operand1_ptr , operand2Value );
                  break;
 		}
 	}
