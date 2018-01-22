@@ -107,6 +107,13 @@ int getOperation ( string s )
 		if ( s[i] == '*' ) { return multiplication ; }
 		if ( s[i] == '\'' ) { return transpose;}
 		if ( s[i] == '.' && s[i+1] == '/') {return elementWiseDivision;}
+		if ( s[i] == '.' && s[i+1] == '+') { return elementWiseAddition ; }
+		if ( s[i] == '.' && s[i+1] == '-') { return elementWiseSubtraction ; }
+		if ( s[i] == '.' && s[i+1] == '*') { return elementWiseMultiplication ; }
+		if ( s[i] == '&' ) { return and ; }
+		if ( s[i] == 'b' && s[i+1] == 'i' && s[i+2] == 't' && s[i+3] == 'a') { return bitand ; }
+		if ( s[i] == 'f' && s[i+1] == 'a' && s[i+1] == 'c') { return factorial ; }
+
 	}
 	return NoOperation ;
 }
