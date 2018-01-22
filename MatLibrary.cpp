@@ -556,7 +556,7 @@
 
 
 
-	void CMatrix::elementWiseAddition(CMatrix* operand1_ptr , double operand2 , int operation )
+		void CMatrix::elementWiseAddition(CMatrix* operand1_ptr , double operand2 )
 	{
 		unsigned long i,j;
 		double** operand1Matrix  = (*operand1_ptr).matrix_ptr;
@@ -567,26 +567,15 @@
 			this->columnsNumber = operand1_ptr->columnsNumber;
 			this->rowsNumber    = operand1_ptr->rowsNumber;
 			double** newMatrix_ptr = createMatrix(rowsNumber , columnsNumber);
-			if (operation == NormalOperation)
-			{
+
 				for(i = 0 ; i < rowsNumber ; i++)
 				{
 					for(j = 0 ;j < columnsNumber ; j++)
 					{
-						newMatrix_ptr[i][j] = operand1Matrix[i][j] * operand2 ;
+						newMatrix_ptr[i][j] = operand1Matrix[i][j] + operand2 ;
 					}
 				}
-			}
-			else if (operation == InvertedOperation)
-			{
-				for(i = 0 ; i < rowsNumber ; i++)
-				{
-					for(j = 0 ;j < columnsNumber ; j++)
-					{
-						newMatrix_ptr[i][j] = operand2 * operand1Matrix[i][j];
-					}
-				}
-			}
+			
 			// Delete matrix pointer
 			for (i = 0; i < oldRowsNumber ; i++)
 			{
@@ -601,26 +590,15 @@
 			matrix_ptr = newMatrix_ptr;
 			return;
 		}
-		if(operation == NormalOperation)
-		{
+
 			for(i = 0 ; i < rowsNumber ; i++)
 			{
 				for(j = 0 ;j < columnsNumber ; j++)
 				{
-					matrix_ptr[i][j] = operand1Matrix[i][j] * operand2 ;
+					matrix_ptr[i][j] = operand1Matrix[i][j] + operand2 ;
 				}
 			}
-		}
-		else if(operation == InvertedOperation)
-		{
-			for(i = 0 ; i < rowsNumber ; i++)
-			{
-				for(j = 0 ;j < columnsNumber ; j++)
-				{
-					matrix_ptr[i][j] = operand2 * operand1Matrix[i][j] ;
-				}
-			}
-		}
+
 	}
 
 	void CMatrix::elementWiseSubtraction(CMatrix* operand1_ptr , double operand2 , int operation )
@@ -670,29 +648,30 @@
 			matrix_ptr = newMatrix_ptr;
 			return;
 		}
-		if(operation == NormalOperation)
-		{
-			for(i = 0 ; i < rowsNumber ; i++)
+
+			if(operation == NormalOperation)
 			{
-				for(j = 0 ;j < columnsNumber ; j++)
+				for(i = 0 ; i < rowsNumber ; i++)
 				{
-					matrix_ptr[i][j] = operand1Matrix[i][j] - operand2 ;
+					for(j = 0 ;j < columnsNumber ; j++)
+					{
+						matrix_ptr[i][j] = operand1Matrix[i][j] - operand2 ;
+					}
 				}
 			}
-		}
-		else if(operation == InvertedOperation)
-		{
-			for(i = 0 ; i < rowsNumber ; i++)
+			else if(operation == InvertedOperation)
 			{
-				for(j = 0 ;j < columnsNumber ; j++)
+				for(i = 0 ; i < rowsNumber ; i++)
 				{
-					matrix_ptr[i][j] = operand2 - operand1Matrix[i][j] ;
+					for(j = 0 ;j < columnsNumber ; j++)
+					{
+						matrix_ptr[i][j] = operand2 - operand1Matrix[i][j] ;
+					}
 				}
 			}
-		}
 	}
 
-	void CMatrix::elementWiseMultiplication(CMatrix* operand1_ptr , double operand2 , int operation )
+	void CMatrix::elementWiseMultiplication(CMatrix* operand1_ptr , double operand2  )
 	{
 		// to multiply matrix with an element
 		unsigned long i,j;
@@ -704,8 +683,7 @@
 			this->columnsNumber = operand1_ptr->columnsNumber;
 			this->rowsNumber    = operand1_ptr->rowsNumber;
 			double** newMatrix_ptr = createMatrix(rowsNumber , columnsNumber);
-			if (operation == NormalOperation)
-			{
+
 				for(i = 0 ; i < rowsNumber ; i++)
 				{
 					for(j = 0 ;j < columnsNumber ; j++)
@@ -713,17 +691,8 @@
 						newMatrix_ptr[i][j] = operand1Matrix[i][j] * operand2 ;
 					}
 				}
-			}
-			else if (operation == InvertedOperation)
-			{
-				for(i = 0 ; i < rowsNumber ; i++)
-				{
-					for(j = 0 ;j < columnsNumber ; j++)
-					{
-						newMatrix_ptr[i][j] = operand2 * operand1Matrix[i][j];
-					}
-				}
-			}
+			
+
 			// To delete old matrix pointer
 			for (i = 0; i < oldRowsNumber ; i++)
 			{
@@ -738,8 +707,7 @@
 			matrix_ptr = newMatrix_ptr;
 			return;
 		}
-		if(operation == NormalOperation)
-		{
+
 			for(i = 0 ; i < rowsNumber ; i++)
 			{
 				for(j = 0 ;j < columnsNumber ; j++)
@@ -747,26 +715,16 @@
 					matrix_ptr[i][j] = operand1Matrix[i][j] * operand2 ;
 				}
 			}
-		}
-		else if(operation == InvertedOperation)
-		{
-			for(i = 0 ; i < rowsNumber ; i++)
-			{
-				for(j = 0 ;j < columnsNumber ; j++)
-				{
-					matrix_ptr[i][j] = operand2 * operand1Matrix[i][j] ;
-				}
-			}
-		}
+		
 	}
 
 	void CMatrix::elementWiseMultiplication(CMatrix* operand1_ptr , CMatrix* operand2_ptr )
-	(
-		if(operand1_ptr->rowsNumber != operand2_ptr->rowsNumber||operand1_ptr->columnsNumber!= operand2_ptr->columnsNumber )
+	{
+		/*if(operand1_ptr->rowsNumber != operand2_ptr->rowsNumber||operand1_ptr->columnsNumber!= operand2_ptr->columnsNumber )
 		{
 			throw("Error invalid operand dimensions");
 			return;
-		}
+		}*/
 		unsigned long i , j;
 		double** operand1Matrix = operand1_ptr->matrix_ptr;
 		double** operand2Matrix = operand2_ptr->matrix_ptr;
@@ -811,7 +769,144 @@
 					matrix_ptr[i][j] = operand1Matrix[i][j] * operand2Matrix[i][j] ;
 				}
 			}
-	)
+	}
+		void CMatrix::and ( CMatrix* operand1_ptr , CMatrix* operand2_ptr )
+	{
+		unsigned long i , j;
+		double** operand1Matrix = operand1_ptr->matrix_ptr;
+		double** operand2Matrix = operand2_ptr->matrix_ptr;
+		if ((operand1_ptr->rowsNumber != rowsNumber) || (operand1_ptr->columnsNumber != columnsNumber))
+		{
+			unsigned int oldRowsNumber = this->rowsNumber;
+			this->columnsNumber = operand1_ptr->columnsNumber;
+			this->rowsNumber    = operand1_ptr->rowsNumber;
+			double** newMatrix_ptr = createMatrix(rowsNumber , columnsNumber);
+			for(i = 0 ; i < rowsNumber ; i++)
+			{
+				for(j = 0 ;j < columnsNumber ; j++)
+				{
+					newMatrix_ptr[i][j] = operand1Matrix[i][j] && operand2Matrix[i][j] ;
+				}
+			}
+			for (i = 0; i < oldRowsNumber ; i++)
+			{
+				delete[] matrix_ptr[i];
+			}
+			delete[] matrix_ptr;
+			matrix_ptr = createMatrix(rowsNumber , columnsNumber);
+			for (i = 0 ; i < rowsNumber ; i++)
+			{
+				matrix_ptr[i] = newMatrix_ptr[i];
+			}
+			matrix_ptr = newMatrix_ptr;
+			return;
+		}
+
+			for(i = 0 ; i < rowsNumber ; i++)
+			{
+				for(j = 0 ;j < columnsNumber ; j++)
+				{
+					matrix_ptr[i][j] = operand1Matrix[i][j] && operand2Matrix[i][j] ;
+				}
+			}
+	}
+
+	void CMatrix::bitand ( CMatrix* operand1_ptr , CMatrix* operand2_ptr )
+	{
+		unsigned long i , j;
+		double** operand1Matrix = operand1_ptr->matrix_ptr;
+		double** operand2Matrix = operand2_ptr->matrix_ptr;
+		if ((operand1_ptr->rowsNumber != rowsNumber) || (operand1_ptr->columnsNumber != columnsNumber))
+		{
+			unsigned int oldRowsNumber = this->rowsNumber;
+			this->columnsNumber = operand1_ptr->columnsNumber;
+			this->rowsNumber    = operand1_ptr->rowsNumber;
+			double** newMatrix_ptr = createMatrix(rowsNumber , columnsNumber);
+			for(i = 0 ; i < rowsNumber ; i++)
+			{
+				for(j = 0 ;j < columnsNumber ; j++)
+				{
+					newMatrix_ptr[i][j] = (int)operand1Matrix[i][j] & (int)operand2Matrix[i][j] ;
+				}
+			}
+			for (i = 0; i < oldRowsNumber ; i++)
+			{
+				delete[] matrix_ptr[i];
+			}
+			delete[] matrix_ptr;
+			matrix_ptr = createMatrix(rowsNumber , columnsNumber);
+			for (i = 0 ; i < rowsNumber ; i++)
+			{
+				matrix_ptr[i] = newMatrix_ptr[i];
+			}
+			matrix_ptr = newMatrix_ptr;
+			return;
+		}
+
+			for(i = 0 ; i < rowsNumber ; i++)
+			{
+				for(j = 0 ;j < columnsNumber ; j++)
+				{
+					matrix_ptr[i][j] = (int)operand1Matrix[i][j] & (int)operand2Matrix[i][j] ;
+				}
+			}
+	}
+
+	void CMatrix::factorial ( CMatrix* operand1_ptr )
+	{
+		unsigned long i , j ; 
+		int k ;
+		int factorial ;
+		double** operand1Matrix = operand1_ptr->matrix_ptr;
+		if ((operand1_ptr->rowsNumber != rowsNumber) || (operand1_ptr->columnsNumber != columnsNumber))
+		{
+			unsigned int oldRowsNumber = this->rowsNumber;
+			this->columnsNumber = operand1_ptr->columnsNumber;
+			this->rowsNumber    = operand1_ptr->rowsNumber;
+			double** newMatrix_ptr = createMatrix(rowsNumber , columnsNumber);
+			for(i = 0 ; i < rowsNumber ; i++)
+			{
+				for(j = 0 ;j < columnsNumber ; j++)
+				{
+					factorial = 1 ;
+					k = (int)operand1Matrix[i][j] ;
+					if (k<0) k*= -1 ;
+					for ( ; k >1 ; k-- )
+					{
+						factorial *= k ; 
+					}
+					newMatrix_ptr[i][j] = factorial ;
+				}
+			}
+			for (i = 0; i < oldRowsNumber ; i++)
+			{
+				delete[] matrix_ptr[i];
+			}
+			delete[] matrix_ptr;
+			matrix_ptr = createMatrix(rowsNumber , columnsNumber);
+			for (i = 0 ; i < rowsNumber ; i++)
+			{
+				matrix_ptr[i] = newMatrix_ptr[i];
+			}
+			matrix_ptr = newMatrix_ptr;
+			return;
+		}
+
+			for(i = 0 ; i < rowsNumber ; i++)
+			{
+				for(j = 0 ;j < columnsNumber ; j++)
+				{
+					factorial = 1 ;
+					k = (int)operand1Matrix[i][j] ;
+					if (k<0) k*= -1 ;
+					for ( ; k > 0 ; k-- )
+					{
+						factorial *= k ; 
+					}
+					matrix_ptr[i][j] = factorial ;					
+				}
+			}
+	}
 
 
 
