@@ -115,6 +115,37 @@ public:
 	 * -A function that takes 1 pointers to the CMatrix class,which is the operand.
 	 * -It gets the transpose of the operand and puts it in calling object Matrix.
 	 */
+	 void power(CMatrix* operand1_ptr ,double value);
+    /*
+     * -parameters : value it's type double and the power value.
+     * -Return type: void.
+     * -A function that takes value it's type double and 
+	 *  the power value.
+     * -It makes  power for value.
+     * */
+    void power(double operandV,double value2);
+    /*
+     * -parameters :1 pointer to matrix class and the power value.
+     * -Return type: void.
+     * -A function that takes 1 pointer to the CMatrix class, it is
+	 *   operand1 and the power value.
+     * -It makes individual items power.
+     * */
+    void elementwisepower(CMatrix* operand1_ptr ,double value);
+	/*
+	 * -Parameters  : 2 pointers to the matrix class.
+	 * -Return type : void.
+	 * -A function that takes 2 pointers to the CMatrix class, the first one is
+	 *   operand1,and the second one is operand2.
+	 * -It powers every element in operand1 by the corresponding element in operand2,and puts the result in the calling object Matrix.
+	 */
+    void elementwisepower(CMatrix* operand1_ptr ,CMatrix* operand2_ptr);
+	/*
+	 * -Parameters  : 1 pointers to the matrix class.
+	 * -Return type : void.
+	 * -A function that takes 1 pointers to the CMatrix class,which is the operand.
+	 * -It gets the transpose of the operand and puts it in calling object Matrix.
+	 */
 	void transpose(CMatrix* );
 
 	/*
