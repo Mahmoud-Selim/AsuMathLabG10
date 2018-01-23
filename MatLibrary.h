@@ -142,10 +142,10 @@ public:
 	void elementWiseDivide(CMatrix* operand1_ptr , CMatrix* operand2_ptr);
 	void elementWiseDivide(CMatrix* operand1_ptr , double operand2 , int operation);
 	~CMatrix(void);
-	void CMatrix::elementWiseAddition(CMatrix* operand1_ptr , double operand2  );
-	void CMatrix::elementWiseSubtraction(CMatrix* operand1_ptr , double operand2 , int operation );
-	void CMatrix::elementWiseMultiplication(CMatrix* operand1_ptr , double operand2  );
-	void CMatrix::elementWiseMultiplication(CMatrix* operand1_ptr , CMatrix* operand2_ptr );
+	void elementWiseAddition(CMatrix* operand1_ptr , double operand2  );
+	void elementWiseSubtraction(CMatrix* operand1_ptr , double operand2 , int operation );
+	void elementWiseMultiplication(CMatrix* operand1_ptr , double operand2  );
+	void elementWiseMultiplication(CMatrix* operand1_ptr , CMatrix* operand2_ptr );
 	void AND ( CMatrix* , CMatrix* );
 	void OR ( CMatrix* , CMatrix* );
 	void factorial ( CMatrix* );
