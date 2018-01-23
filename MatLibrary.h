@@ -148,7 +148,7 @@ public:
 	void CMatrix::elementWiseMultiplication(CMatrix* operand1_ptr , CMatrix* operand2_ptr );
 	void AND ( CMatrix* , CMatrix* );
 	void OR ( CMatrix* , CMatrix* );
-	void factorial ( CMatrix* )
+	void factorial ( CMatrix* );
 	
 
 	void printMatrix(void);
