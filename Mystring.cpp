@@ -100,7 +100,7 @@ string getOperand2( string s)
 			token = strtok(NULL, separators);
 			if(*token == '.')
 			token = strtok(NULL , separators);
-		
+		}
 		if(token)// condition da 3asha case law "A=B"
 		{
 			if(i==2)
