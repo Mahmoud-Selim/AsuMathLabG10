@@ -208,10 +208,10 @@ CMatrix* createAndEvaluate (string s)
 			case elementWiseDivision:
 				result_ptr->elementWiseDivide(operand1_ptr , operand2Value , operationMode);
 				break;
-			case Addition:
+			case addition:
 				result_ptr-> elementWiseSubtraction (operand1_ptr , operand2Value);
 				break;
-			case Subtraction:	
+			case subtraction:	
 				result_ptr-> elementWiseSubtraction (operand1_ptr , operand2Value, operationMode);
 				break;
 			case elementWiseMultiplication:
