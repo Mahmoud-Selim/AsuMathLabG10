@@ -770,7 +770,7 @@
 				}
 			}
 	}
-		void CMatrix::and ( CMatrix* operand1_ptr , CMatrix* operand2_ptr )
+		void CMatrix::AND ( CMatrix* operand1_ptr , CMatrix* operand2_ptr )
 	{
 		unsigned long i , j;
 		double** operand1Matrix = operand1_ptr->matrix_ptr;
@@ -811,7 +811,7 @@
 			}
 	}
 
-	void CMatrix::bitand ( CMatrix* operand1_ptr , CMatrix* operand2_ptr )
+		void CMatrix::OR ( CMatrix* operand1_ptr , CMatrix* operand2_ptr )
 	{
 		unsigned long i , j;
 		double** operand1Matrix = operand1_ptr->matrix_ptr;
@@ -826,7 +826,7 @@
 			{
 				for(j = 0 ;j < columnsNumber ; j++)
 				{
-					newMatrix_ptr[i][j] = (int)operand1Matrix[i][j] & (int)operand2Matrix[i][j] ;
+					newMatrix_ptr[i][j] = operand1Matrix[i][j] || operand2Matrix[i][j] ;
 				}
 			}
 			for (i = 0; i < oldRowsNumber ; i++)
@@ -847,7 +847,7 @@
 			{
 				for(j = 0 ;j < columnsNumber ; j++)
 				{
-					matrix_ptr[i][j] = (int)operand1Matrix[i][j] & (int)operand2Matrix[i][j] ;
+					matrix_ptr[i][j] = operand1Matrix[i][j] || operand2Matrix[i][j] ;
 				}
 			}
 	}
