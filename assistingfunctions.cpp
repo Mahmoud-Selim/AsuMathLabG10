@@ -183,6 +183,25 @@ CMatrix* createAndEvaluate (string s)
 				result_ptr = INSERT(ID , rowsNumber ,columnsNumber);
 				result_ptr->elementWiseDivide(operand1_ptr , operand2_ptr);
 				break;
+				
+			case elementWiseAddition:
+				rowsNumber    = operand1_ptr->getRowsNumber();
+				columnsNumber = operand1_ptr->getColumnsNumber();
+				result_ptr = INSERT(ID , rowsNumber ,columnsNumber);
+				result_ptr-> elementWiseAddition (operand1_ptr , operand2_ptr);
+				break;
+			case elementWiseSubtraction:
+				rowsNumber    = operand1_ptr->getRowsNumber();
+				columnsNumber = operand1_ptr->getColumnsNumber();
+				result_ptr = INSERT(ID , rowsNumber ,columnsNumber);	
+				result_ptr-> elementWiseSubtraction (operand1_ptr , operand2_ptr);
+				break;
+			case elementWiseMultiplication:
+				rowsNumber    = operand1_ptr->getRowsNumber();
+				columnsNumber = operand1_ptr->getColumnsNumber();
+				result_ptr = INSERT(ID , rowsNumber ,columnsNumber);
+				result_ptr-> elementWiseMultiplication (operand1_ptr , operand2_ptr);
+				break;
 		}
 	}
 	else if (operandState == Operand1)
