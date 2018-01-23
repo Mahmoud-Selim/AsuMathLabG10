@@ -10,7 +10,7 @@
 
 enum
 {
-	NoOperation,addition,subtraction,multiplication,division,transpose,elementWiseDivision,elementWisePower,Power,squareRoot,elementWiseAddition,elementWiseSubtraction,elementWiseMultiplication,bitand,and,factorial
+	NoOperation,addition,subtraction,multiplication,division,transpose,elementWiseDivision,elementWisePower,Power,squareRoot,elementWiseMultiplication,OR,AND,factorial
 };
 enum
 {
@@ -146,8 +146,8 @@ public:
 	void CMatrix::elementWiseSubtraction(CMatrix* operand1_ptr , double operand2 , int operation );
 	void CMatrix::elementWiseMultiplication(CMatrix* operand1_ptr , double operand2  );
 	void CMatrix::elementWiseMultiplication(CMatrix* operand1_ptr , CMatrix* operand2_ptr );
-	void and ( CMatrix* , CMatrix* );
-	void bitand ( CMatrix* , CMatrix* );
+	void AND ( CMatrix* , CMatrix* );
+	void OR ( CMatrix* , CMatrix* );
 	void factorial ( CMatrix* )
 	
 
