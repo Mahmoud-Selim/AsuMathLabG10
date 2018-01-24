@@ -34,7 +34,7 @@ string getOperand1( string s)
 	char *text=new char [s.length()+1];
 	strcpy(text,s.c_str());
 	char *ttext =trim(text);
-	char separators[] = "=+-*/\' ";
+	char separators[] = "=+-*/\'^ ";
 	char* token = strtok(ttext, separators);
 	if (getOperation(s) == NoOperation)
 	{
@@ -73,24 +73,37 @@ string getOperand2( string s)
 	char *text=new char [s.length()+1];
 	strcpy(text,s.c_str()); //converting string into array of characters
 	char *ttext =trim(text);//trimmed array
-	char spearators[] = "=+-*\'/. ";
+	char spearators[] = "=+-*\'/.^ ";
+	char separators [] = "=+-*\'/^ ";
 	char* token = strtok(ttext, spearators);
 	while(token)
 	{
 		i++;
-		token = strtok(NULL, spearators);
+		if(i < 2)
+		{
+			token = strtok(NULL, spearators);
+		}
+		else
+		{
+			token = strtok(NULL, separators);
+			if(*token == '.')
+			token = strtok(NULL , separators);
+		}
 		if(token)// condition da 3asha case law "A=B"
 		{
 			if(i==2)
-				{
-					return token ;//it will find the second operand in the second iteration
-				}
+			{
+				if(*(token-1) == '-')
+				token = token -1;
+				return token ;//it will find the second operand in the second iteration
+			}
 		}
 		else return"No operand";
 
 	}
 	return"No operand";
 }
+
 /*
  *
  *
@@ -106,7 +119,9 @@ int getOperation ( string s )
 		if ( s[i] == '/' ) { return division ; }
 		if ( s[i] == '*' ) { return multiplication ; }
 		if ( s[i] == '\'' ) { return transpose;}
+		if ( s[i] == '^' ) { return Power;}
 		if ( s[i] == '.' && s[i+1] == '/') {return elementWiseDivision;}
+                if ( s[i] == '.' && s[i+1] == '^') {return elementWisePower;}
 	}
 	return NoOperation ;
 }
