@@ -85,8 +85,23 @@ CMatrix* createAndEvaluate (string s)
 	double operand1Value,operand2Value;
 	string ID = getID(s);
 	CMatrix* result_ptr;
-	string operand1 = getOperand1(s);
-	string operand2 = getOperand2(s);
+    string operand1 , operand2;
+    int j = s.find("(");
+    int k = s.find("sqrt");
+	if(j>0)
+    {
+        operand1 = getOperand1Bracket(s);
+        std::cout<<std::endl<<" "<<operand1<<std::endl;
+        if(k)
+            operand2 = "0.5";
+        else
+            operand2 = getOperand2(s);
+    }
+    else
+    {
+        operand1 = getOperand1(s);
+    	operand2 = getOperand2(s);
+    }
 	if (operand1[0] == '-')
 	{
 		i++;
@@ -106,14 +121,14 @@ CMatrix* createAndEvaluate (string s)
 	if (operand2[0] == '-')
 	{
 		i++;
-		operand2Value = -1.0 * ( (double) atof(operand1.substr(i).c_str()) );
+		operand2Value = -1.0 * ( (double) atof(operand2.substr(i).c_str()) );
 		operandValueFlag = 1;
 	}
 	if (operand2[i] >= '0' && operand2[i] <= '9')
 	{
 		if (operandState == Operand1)
 		{
-//			operandState == Both;
+			operandState = Both;
 			i = 0;
 		}
 		else
@@ -171,6 +186,7 @@ CMatrix* createAndEvaluate (string s)
 				result_ptr->divide(operand1_ptr , operand2_ptr);
 				break;
 
+
 			case transpose:
 				rowsNumber    = operand1_ptr->getColumnsNumber();
 				columnsNumber = operand1_ptr->getRowsNumber();
@@ -182,6 +198,12 @@ CMatrix* createAndEvaluate (string s)
 				columnsNumber = operand1_ptr->getColumnsNumber();
 				result_ptr = INSERT(ID , rowsNumber ,columnsNumber);
 				result_ptr->elementWiseDivide(operand1_ptr , operand2_ptr);
+				break;
+			case elementWisePower:
+				rowsNumber    = operand1_ptr->getRowsNumber();
+				columnsNumber = operand1_ptr->getColumnsNumber();
+				result_ptr = INSERT(ID , rowsNumber ,columnsNumber);
+				result_ptr->elementwisepower(operand1_ptr , operand2_ptr);
 				break;
 		}
 	}
@@ -199,11 +221,31 @@ CMatrix* createAndEvaluate (string s)
 		{
 			case elementWiseDivision:
 				result_ptr->elementWiseDivide(operand1_ptr , operand2Value , operationMode);
+				break;
+
+			case elementWisePower:
+				result_ptr->elementwisepower(operand1_ptr , operand2Value);
+				break;
+                
+            case Power:
+                 result_ptr->power(operand1_ptr , operand2Value );
+                 break;
+			case squareRoot:
+				result_ptr->elementwisepower(operand1_ptr , operand2Value);
+				break;
 		}
 	}
 	else if (operandState == Both)
 	{
-
+		int operation = getOperation(s);
+		unsigned long rowsNumber    = 1;
+		unsigned long columnsNumber = 1;
+		result_ptr = INSERT(ID , rowsNumber ,columnsNumber);
+		switch (operation)
+        {
+            case Power:
+                 result_ptr->power(operand1Value , operand2Value );
+        }
 	}
 	return result_ptr;
 }
@@ -221,8 +263,24 @@ void Evaluate (string s)
 	unsigned long i = 0, operandState = None , operationMode , operandValueFlag = 0;
 	double operand1Value,operand2Value;
 	string ID = getID(s);
-	string operand1 = getOperand1(s);
-	string operand2 = getOperand2(s);
+	string operand1 , operand2;
+    int j = s.find("(");
+    int k = s.find("sqrt");
+	if(j>0)
+    {
+        operand1 = getOperand1Bracket(s);
+        
+        if(k>0)
+            operand2 = "0.5";
+        else
+            operand2 = getOperand2(s);
+    }
+    else
+    {
+        operand1 = getOperand1(s);
+    	operand2 = getOperand2(s);
+    }
+
 	CMatrix* result_ptr = ISEXISTING(ID);
 	if (operand1[0] == '-')
 	{
@@ -243,7 +301,7 @@ void Evaluate (string s)
 	if (operand2[0] == '-')
 	{
 		i++;
-		operand2Value = -1.0 * ( (double) atof(operand1.substr(i).c_str()) );
+		operand2Value = -1.0 * ( (double) atof(operand2.substr(i).c_str()) );
 		operandValueFlag = 1;
 	}
 	if (operand2[i] >= '0' && operand2[i] <= '9')
@@ -297,6 +355,9 @@ void Evaluate (string s)
 			case elementWiseDivision:
 				result_ptr->elementWiseDivide(operand1_ptr , operand2_ptr);
 				break;
+			case elementWisePower:
+				result_ptr->elementwisepower(operand1_ptr , operand2_ptr);
+				break;
 		}
 	}
 	else if (operandState == Operand1)
@@ -309,12 +370,27 @@ void Evaluate (string s)
 		switch (operation)
 		{
 			case elementWiseDivision:
-				result_ptr->elementWiseDivide(operand1_ptr , operand2Value , operationMode);
+				 result_ptr->elementWiseDivide(operand1_ptr , operand2Value , operationMode);
+                break;
+            case elementWisePower:
+                 result_ptr->elementwisepower(operand1_ptr , operand2Value );
+                 break;
+            case Power:
+                 result_ptr->power(operand1_ptr , operand2Value );
+                 break;
+            case squareRoot:
+                 result_ptr->elementwisepower(operand1_ptr , operand2Value );
+                 break;
 		}
 	}
 	else if (operandState == Both)
 	{
-
+          int operation = getOperation(s);
+		switch (operation)
+        {
+            case Power:
+                 result_ptr->power(operand1Value , operand2Value );
+        }
 	}
 }
 void startOperation(string s)

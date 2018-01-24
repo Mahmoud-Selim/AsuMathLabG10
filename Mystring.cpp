@@ -62,6 +62,18 @@ string getOperand1( string s)
 	return "no operand";
 }
 /*
+ * 
+ * 
+ * getOperand1 if between brackets()
+ * 
+ */
+ string getOperand1Bracket( string s)
+ {
+     int pos1=s.find("(");
+     int pos2=s.find(")");
+     return s.substr(pos1+1,pos2-pos1-1);
+ }
+/*
  *
  *
  * getOperand2 function
@@ -121,7 +133,8 @@ int getOperation ( string s )
 		if ( s[i] == '\'' ) { return transpose;}
 		if ( s[i] == '^' ) { return Power;}
 		if ( s[i] == '.' && s[i+1] == '/') {return elementWiseDivision;}
-                if ( s[i] == '.' && s[i+1] == '^') {return elementWisePower;}
+        if ( s[i] == '.' && s[i+1] == '^') {return elementWisePower;}
+		if ( s[i] == 's' && s[i+1] == 'q' ) { return squareRoot ; }
 	}
 	return NoOperation ;
 }

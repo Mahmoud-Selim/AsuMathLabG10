@@ -23,6 +23,11 @@ string getOperand1( string s);
  * parameters :input string
  * return type : string containing first operand
  */
+string getOperand1Bracket( string s);
+/*
+ * parameters :input string
+ * return type: string containg first operand if it is included between brackets
+ */
 string getOperand2( string s);
 /*
  * parameters :input string
