@@ -141,7 +141,7 @@
 	{
 		if(operand1_ptr->columnsNumber != operand2_ptr->rowsNumber)
 		{
-			throw("Error invalid operand dimensions");
+			throw("Error invalid operand dimension");
 			return;
 		}
 		unsigned long i,j,k;
@@ -293,6 +293,127 @@
 		/////////////Multipling B^-1 with A ////////////
 	   multiply( operand1_ptr , &INV);
 }
+     void CMatrix::power(CMatrix* operand1_ptr ,double value)
+    {
+        unsigned int i,j;
+        CMatrix powered(operand1_ptr->rowsNumber,operand1_ptr->columnsNumber);
+        powered.copy(operand1_ptr);
+        int valueINT = value;
+    if((operand1_ptr->rowsNumber==1)&&(operand1_ptr->columnsNumber==1)&&(value-valueINT))
+    {
+        matrix_ptr[0][0]=pow(operand1_ptr->matrix_ptr[0][0],value);
+            
+    }
+    else if (value == 0)
+        for(i=0;i<rowsNumber;i++)
+            {
+                for(j=0;j<columnsNumber;j++)
+                {
+                    
+                matrix_ptr[i][j]=(i==j)?1.0:0.0;
+                }
+            }
+    else if (value<0)
+        {
+            if(operand1_ptr->columnsNumber != operand1_ptr->rowsNumber)
+		{
+			throw("Error invalid operand dimensions");
+			return;
+		}
+
+	    int i,j,k,n = operand1_ptr->rowsNumber,pivotMaxIndex;
+	    CMatrix INV(n,n);
+	    double d;
+	    double** a ;
+	    a = new double* [(2*n)];
+	    for(i = 0 ; i < (2*n) ; i++)
+	    {
+	    	a[i] = new double [(2*n)];
+	    }
+	    for(i=0;i<n;i++)
+	        for(j=0;j<n;j++)
+	            a[i][j] = operand1_ptr->matrix_ptr[i][j];
+
+
+	    for(i=0;i<n;i++)
+	        for(j=n;j<2*n;j++)
+	            if(j==(i+n))
+	                a[i][j]=1;
+	            else
+	            	a[i][j] = 0;
+	    /********** reducing to diagonal  matrix ***********/
+	    for(i=0;i<n;i++)
+	    {
+	    	pivotMaxIndex = i;
+	    	for(j = i+1 ; j < n ; j++)
+	    	{
+	    		if(fabs(a[j][i]) > fabs(a[pivotMaxIndex][i]))
+	    		{
+	    			pivotMaxIndex = j;
+	    		}
+	    	}
+	    	for(j = 0 ; j < 2*n ; j++)
+	    	{
+	    		double temp = a[pivotMaxIndex][j];
+	    		a[pivotMaxIndex][j] = a[i][j];
+	    		a[i][j] = temp;
+	    	}
+	    	/****************makin zeros obove and below pivot element*********************/
+	        for(j=0;j<n*2;j++)
+	        if(j!=i)
+	        {
+	            d=a[j][i]/a[i][i];
+	            for(k=0;k<n*2;k++)
+	                a[j][k]-=a[i][k]*d;
+	        }
+	    /************** reducing to unit matrix *************/
+	    	d=a[i][i];
+	        for(j=0;j<n*2;j++)
+	            a[i][j]=a[i][j]/d;
+	    }
+
+
+	    double** inv_matrix_ptr = INV.matrix_ptr;
+	    for (i = 0 ; i < n ; i ++)
+	    {
+	    	for (j = n; j <n*2 ; j++)
+	    	{
+	    		inv_matrix_ptr[i][j-n] = a[i][j];
+	    	}
+	    }
+
+	    for(i = 0 ; i < n ; i++)
+	    {
+	    	delete [] a[i];
+	    }
+	    delete [] a;
+        for( i=0;i>value;i--)
+                powered.multiply( &INV , &powered);
+            multiply( &INV , &powered);
+        }
+        else if(value>1)
+        {
+            for( i=1;i<value-1;i++)
+                powered.multiply( operand1_ptr , &powered);
+            multiply( operand1_ptr , &powered);
+        }
+
+        else if (value == 1)
+            for(i=0;i<rowsNumber;i++)
+            {
+                for(j=0;j<columnsNumber;j++)
+                {
+                    
+                matrix_ptr[i][j]=operand1_ptr->matrix_ptr[i][j];
+                }
+            }
+            
+
+    }
+    void CMatrix::power(double operandV,double value2)
+    {
+        matrix_ptr[0][0]=pow(operandV,value2);
+    }
     void CMatrix::elementwisepower(CMatrix* operand1_ptr ,double value)
     {
         double** p1 = (*operand1_ptr).matrix_ptr;
@@ -312,6 +433,19 @@
             for(unsigned int j=0;j<operand1_ptr->columnsNumber;j++)
                 matrix_ptr[i][j]=pow(operand1_ptr->matrix_ptr[i][j],operand2_ptr->matrix_ptr[i][j]);
     }
+        /*void CMatrix::transpose(CMatrix* operand_ptr)
+        {
+                unsigned long i,j;
+                double** operandMatrix  = (*operand_ptr).matrix_ptr;
+                for(i = 0 ; i < rowsNumber ; i++)
+                {
+                        for(j = 0 ;j < columnsNumber ; j++)
+                        {
+                                matrix_ptr[i][j] = operandMatrix[j][i];
+                        }
+                }
+        }*/
+
 
 	void CMatrix::transpose(CMatrix* operand_ptr)
 	{
@@ -570,6 +704,15 @@
 			}
 		}
 	}
+
+
+
+
+
+
+
+
+
 
 
 
