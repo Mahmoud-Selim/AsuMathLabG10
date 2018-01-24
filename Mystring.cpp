@@ -137,7 +137,7 @@ int getOperation ( string s )
 		if ( s[i] == '.' && s[i+1] == '*') { return elementWiseMultiplication ; }
 		if ( s[i] == '&' ) { return AND ; }
 		if ( s[i] == '|' ) { return OR ; }
-		if ( s[i] == 'f' && s[i+1] == 'a' && s[i+1] == 'c') { return factorial ; }
+		if ( s[i] == 'f' && s[i+1] == 'a' && s[i+2] == 'c') { return factorial ; }
 
 	}
 	return NoOperation ;
