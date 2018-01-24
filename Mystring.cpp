@@ -62,16 +62,19 @@ string getOperand1( string s)
 	return "no operand";
 }
 /*
- * 
- * 
+ *
+ *
  * getOperand1 if between brackets()
- * 
+ *
  */
  string getOperand1Bracket( string s)
  {
      int pos1=s.find("(");
      int pos2=s.find(")");
-     return s.substr(pos1+1,pos2-pos1-1);
+    string temp= s.substr(pos1+1,pos2-pos1-1);
+     char* str=new char[temp.length() + 1];;
+    strcpy(str,temp.c_str());
+    return trim(str);
  }
 /*
  *
@@ -135,6 +138,12 @@ int getOperation ( string s )
 		if ( s[i] == '.' && s[i+1] == '/') {return elementWiseDivision;}
         if ( s[i] == '.' && s[i+1] == '^') {return elementWisePower;}
 		if ( s[i] == 's' && s[i+1] == 'q' ) { return squareRoot ; }
+		if ( s[i] == 's' && s[i+1] == 'i' && s[i+2] == 'n' ) { return SinFn ; }
+		if ( s[i] == 'c' && s[i+1] == 'o' && s[i+2] == 's') { return CosFn ; }
+		if ( s[i] == 't' && s[i+1] == 'a' && s[i+2] == 'n') { return TanFn ; }
+		if ( s[i] == 's' && s[i+1] == 'e' && s[i+2] == 'c') { return SecFn ; }
+		if ( s[i] == 'c' && s[i+1] == 's' && s[i+2] == 'c') { return CscFn ; }
+		if ( s[i] == 'c' && s[i+1] == 'o' && s[i+2] == 't') { return CotFn ; }
 	}
 	return NoOperation ;
 }
