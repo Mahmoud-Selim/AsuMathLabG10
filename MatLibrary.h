@@ -10,7 +10,7 @@
 
 enum
 {
-	NoOperation,addition,subtraction,multiplication,division,transpose,elementWiseDivision,elementWisePower,Power,squareRoot
+	NoOperation,addition,subtraction,multiplication,division,transpose,elementWiseDivision,elementWisePower,Power,squareRoot,SinFn,CosFn,TanFn,SecFn,CscFn,CotFn,LogFn,ln
 };
 enum
 {
@@ -119,7 +119,7 @@ public:
     /*
      * -parameters : value it's type double and the power value.
      * -Return type: void.
-     * -A function that takes value it's type double and 
+     * -A function that takes value it's type double and
 	 *  the power value.
      * -It makes  power for value.
      * */
@@ -146,6 +146,56 @@ public:
 	 * -A function that takes 1 pointers to the CMatrix class,which is the operand.
 	 * -It gets the transpose of the operand and puts it in calling object Matrix.
 	 */
+	  void _Sin(CMatrix* operand1_ptr );
+	 /*
+	 * -Parameters  : 1 pointers to the matrix class.
+	 * -Return type : void.
+	 * -A function that takes 1 pointers to the CMatrix class,which is the operand.
+	 * -It gets sin of the operand and puts it in calling object Matrix.
+	 */
+	 void _Cos(CMatrix* operand1_ptr );
+	  /*
+	 * -Parameters  : 1 pointers to the matrix class.
+	 * -Return type : void.
+	 * -A function that takes 1 pointers to the CMatrix class,which is the operand.
+	 * -It gets cos of the operand and puts it in calling object Matrix.
+	 */
+	 void _Tan(CMatrix* operand1_ptr );
+	  /*
+	 * -Parameters  : 1 pointers to the matrix class.
+	 * -Return type : void.
+	 * -A function that takes 1 pointers to the CMatrix class,which is the operand.
+	 * -It gets tan of the operand and puts it in calling object Matrix.
+	 */
+     void _Sec(CMatrix* operand1_ptr );
+      /*
+	 * -Parameters  : 1 pointers to the matrix class.
+	 * -Return type : void.
+	 * -A function that takes 1 pointers to the CMatrix class,which is the operand.
+	 * -It gets sec of the operand and puts it in calling object Matrix.
+	 */
+     void _Csc(CMatrix* operand1_ptr );
+      /*
+	 * -Parameters  : 1 pointers to the matrix class.
+	 * -Return type : void.
+	 * -A function that takes 1 pointers to the CMatrix class,which is the operand.
+	 * -It gets csc of the operand and puts it in calling object Matrix.
+	 */
+     void _Cot(CMatrix* operand1_ptr );
+     /*
+	 * -Parameters  : 1 pointers to the matrix class.
+	 * -Return type : void.
+	 * - A function that take 1 pointers to the CMatrix class,which is the operand.
+	 * -It gets cot  of the operand and puts it in calling object Matrix.
+	 */
+
+      void _Log(CMatrix* operand1_ptr,double base );
+      /*
+      * -parameters :pointer to the matrix class , the value of the base of the log function
+      * - Return type : void
+      * It gets log of the input matrix for the input base and puts it in the calling object matrix
+      */
+
 	void transpose(CMatrix* );
 
 	/*
