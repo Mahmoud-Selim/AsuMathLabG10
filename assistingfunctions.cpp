@@ -108,6 +108,9 @@ CMatrix* createAndEvaluate (string s)
 
         else if(w>0)
             operand2="2.718281828459";
+	    
+	else if (s.find("factorial") != string::npos)
+	    operand2 = "1.0" ;
 
         else
             operand2 = "0";
@@ -221,6 +224,19 @@ CMatrix* createAndEvaluate (string s)
 				result_ptr = INSERT(ID , rowsNumber ,columnsNumber);
 				result_ptr->elementwisepower(operand1_ptr , operand2_ptr);
 				break;
+			case AND:
+				rowsNumber    = operand1_ptr->getRowsNumber();
+				columnsNumber = operand1_ptr->getColumnsNumber();
+				result_ptr = INSERT(ID , rowsNumber ,columnsNumber);
+				result_ptr-> AND (operand1_ptr , operand2_ptr);
+				break;
+				
+			case OR:
+				rowsNumber    = operand1_ptr->getRowsNumber();
+				columnsNumber = operand1_ptr->getColumnsNumber();
+				result_ptr = INSERT(ID , rowsNumber ,columnsNumber);
+				result_ptr-> OR (operand1_ptr , operand2_ptr);
+				break;
 		}
 	}
 	else if (operandState == Operand1)
@@ -243,39 +259,49 @@ CMatrix* createAndEvaluate (string s)
 				result_ptr->elementwisepower(operand1_ptr , operand2Value);
 				break;
 
-            case Power:
-                 result_ptr->power(operand1_ptr , operand2Value );
-                 break;
-			case squareRoot:
+            		case Power:
+                 		result_ptr->power(operand1_ptr , operand2Value );
+                 		break;
+				
+	    		case squareRoot:
 				result_ptr->elementwisepower(operand1_ptr , operand2Value);
 				break;
-            case SinFn:
+				
+        		case SinFn:
 				result_ptr->_Sin(operand1_ptr);
 				break;
-            case CosFn:
+				
+            		case CosFn:
 				result_ptr->_Cos(operand1_ptr);
 				break;
-            case TanFn:
+				
+            		case TanFn:
 				result_ptr->_Tan(operand1_ptr);
 				break;
-            case SecFn:
+				
+            		case SecFn:
 				result_ptr->_Sec(operand1_ptr);
 				break;
-            case CscFn:
+				
+            		case CscFn:
 				result_ptr->_Csc(operand1_ptr);
 				break;
-            case CotFn:
+				
+            		case CotFn:
 				result_ptr->_Cot(operand1_ptr);
 				break;
 
-            case LogFn:
-
+            		case LogFn:
 				result_ptr->_Log(operand1_ptr,operand2Value);
-                break;
+               			break;
 
-            case ln:
-                result_ptr->_Log(operand1_ptr,operand2Value);
-                break;
+            		case ln:
+               			result_ptr->_Log(operand1_ptr,operand2Value);
+                		break;
+				
+	    		case factorial:
+				result_ptr-> factorial (operand1_ptr );
+				break;
 
 		}
 	}
@@ -329,6 +355,10 @@ void Evaluate (string s)
         }
         else if(w>0)
             operand2="2.718281828459";
+		
+	else if (s.find("factorial") != string::npos)
+	    operand2 = "1.0" ;
+		
         else
             operand2 = "0";
 
@@ -398,23 +428,36 @@ void Evaluate (string s)
 			case addition:
 				result_ptr->add(operand1_ptr , operand2_ptr);
 				break;
+				
 			case subtraction:
 				result_ptr->subtract(operand1_ptr , operand2_ptr);
 				break;
+				
 			case multiplication:
 				result_ptr->multiply(operand1_ptr , operand2_ptr);
 				break;
+				
 			case division:
 				result_ptr->divide(operand1_ptr , operand2_ptr);
 				break;
+				
 			case transpose:
 				result_ptr->transpose(operand1_ptr);
 				break;
+				
 			case elementWiseDivision:
 				result_ptr->elementWiseDivide(operand1_ptr , operand2_ptr);
 				break;
+				
 			case elementWisePower:
 				result_ptr->elementwisepower(operand1_ptr , operand2_ptr);
+				break;
+				
+			case AND:
+				result_ptr->AND(operand1_ptr , operand2_ptr);
+				break;
+			case OR:
+				result_ptr->OR(operand1_ptr , operand2_ptr);
 				break;
 		}
 	}
@@ -428,44 +471,56 @@ void Evaluate (string s)
 		switch (operation)
 		{
 			case elementWiseDivision:
-				 result_ptr->elementWiseDivide(operand1_ptr , operand2Value , operationMode);
-                break;
-            case elementWisePower:
-                 result_ptr->elementwisepower(operand1_ptr , operand2Value );
-                 break;
-            case Power:
-                 result_ptr->power(operand1_ptr , operand2Value );
-                 break;
-            case squareRoot:
-                 result_ptr->elementwisepower(operand1_ptr , operand2Value );
-                 break;
-            case SinFn:
+				result_ptr->elementWiseDivide(operand1_ptr , operand2Value , operationMode);
+                		break;
+				
+            		case elementWisePower:
+                 		result_ptr->elementwisepower(operand1_ptr , operand2Value );
+                 		break;
+				
+            		case Power:
+                 		result_ptr->power(operand1_ptr , operand2Value );
+                 		break;
+				
+            		case squareRoot:
+                 		result_ptr->elementwisepower(operand1_ptr , operand2Value );
+                 		break;
+				
+            		case SinFn:
 				result_ptr->_Sin(operand1_ptr);
 				break;
-            case CosFn:
+				
+            		case CosFn:
 				result_ptr->_Cos(operand1_ptr);
 				break;
-            case TanFn:
+				
+            		case TanFn:
 				result_ptr->_Tan(operand1_ptr);
 				break;
-            case SecFn:
+				
+            		case SecFn:
 				result_ptr->_Sec(operand1_ptr);
 				break;
-            case CscFn:
+				
+            		case CscFn:
 				result_ptr->_Csc(operand1_ptr);
 				break;
-            case CotFn:
+				
+            		case CotFn:
 				result_ptr->_Cot(operand1_ptr);
 				break;
 
-            case LogFn:
-
+            		case LogFn:
 				result_ptr->_Log(operand1_ptr,operand2Value);
-                break;
+                		break;
 
-            case ln:
-                result_ptr->_Log(operand1_ptr,operand2Value);
-                break;
+            		case ln:
+                		result_ptr->_Log(operand1_ptr,operand2Value);
+                		break;
+				
+			case factorial:
+				result_ptr-> factorial (operand1_ptr );
+				break;
 		}
 	}
 	else if (operandState == Both)
