@@ -90,8 +90,12 @@ CMatrix* createAndEvaluate (string s)
     int k = s.find("sqrt");
     int z = s.find("log");
     int w= s.find("ln");
+	int o =s.find ("ones");
+	int ze =s.find ("zeros");
+	int e =s.find("eye");
+	int r =s.find("rand");
 
-    if(j>0)
+     if(j>0 && o<0 && ze<0 && e<0 && r<0)
     {
         operand1 = getOperand1Bracket(s);
         std::cout<<std::endl<<" "<<operand1<<std::endl;
@@ -115,6 +119,10 @@ CMatrix* createAndEvaluate (string s)
         else
             operand2 = "0";
 
+    }
+ else if ( o>0 || ze>0 || e>0 || r>0)
+    {
+        operand1=operand2="nonFound";
     }
     else
     {
@@ -321,6 +329,30 @@ CMatrix* createAndEvaluate (string s)
                  result_ptr->power(operand1Value , operand2Value );
         }
 	}
+if (o>0|| ze>0|| e>0|| r>0)
+    {
+        int operation = getOperation(s);
+		//result_ptr = INSERT(ID , getRowsNumber(s) , getColumnsNumber(s));
+        switch (operation)
+        {
+            case eye:
+		result_ptr = INSERT(ID , getRowsNumber(s)  ,getColumnsNumber(s));
+		result_ptr->eye(getRowsNumber(s) , getColumnsNumber(s));
+		break;
+            case zeros:
+		result_ptr = INSERT(ID , getRowsNumber(s) ,getColumnsNumber(s));
+                result_ptr->zeros(getRowsNumber(s) , getColumnsNumber(s));
+                break;
+            case ones:
+		result_ptr = INSERT(ID , getRowsNumber(s) ,getColumnsNumber(s));
+		result_ptr->ones(getRowsNumber(s) , getColumnsNumber(s));
+		break;
+            case Rand:
+		result_ptr = INSERT(ID , getRowsNumber(s) ,getColumnsNumber(s));
+		result_ptr->Rand(getRowsNumber(s) , getColumnsNumber(s));
+		break;
+        }
+    }
 	return result_ptr;
 }
 string getID ( string s )
@@ -342,8 +374,12 @@ void Evaluate (string s)
     int k = s.find("sqrt");
     int z = s.find("log");
      int w=  s.find("ln");
+	int o =s.find ("ones");
+	int ze =s.find ("zeros");
+	int e =s.find("eye");
+	int r =s.find("rand");
 
-	if(j>0)
+	 if(j>0 && o<0 && ze<0 && e<0 && r<0)
     {
         operand1 = getOperand1Bracket(s);
         std::cout<<std::endl<<" "<<operand1<<std::endl;
@@ -366,6 +402,10 @@ void Evaluate (string s)
         else
             operand2 = "0";
 
+    }
+else if ( o>0 || ze>0 || e>0 || r>0)
+    {
+        operand1=operand2="nonFound";
     }
     else
     {
@@ -548,6 +588,25 @@ void Evaluate (string s)
                  result_ptr->power(operand1Value , operand2Value );
         }
 	}
+if  (o>0|| ze>0|| e>0|| r>0)
+    {
+        int operation = getOperation(s);
+        switch (operation)
+        {
+            case eye:
+		result_ptr->eye(getRowsNumber(s) , getColumnsNumber(s));
+		break;
+            case zeros:
+                result_ptr->zeros(getRowsNumber(s) , getColumnsNumber(s));
+                break;
+            case ones:
+		result_ptr->ones(getRowsNumber(s) , getColumnsNumber(s));
+		break;
+            case Rand:
+		result_ptr->Rand(getRowsNumber(s) , getColumnsNumber(s));
+		break;
+        }
+    }
 }
 void startOperation(string s)
 {
