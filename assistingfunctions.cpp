@@ -209,19 +209,6 @@ CMatrix* createAndEvaluate (string s)
 				result_ptr-> elementWiseMultiplication (operand1_ptr , operand2_ptr);
 				break;
 				
-			case AND:
-				rowsNumber    = operand1_ptr->getRowsNumber();
-				columnsNumber = operand1_ptr->getColumnsNumber();
-				result_ptr = INSERT(ID , rowsNumber ,columnsNumber);
-				result_ptr-> AND (operand1_ptr , operand2_ptr);
-				break;
-				
-			case OR:
-				rowsNumber    = operand1_ptr->getRowsNumber();
-				columnsNumber = operand1_ptr->getColumnsNumber();
-				result_ptr = INSERT(ID , rowsNumber ,columnsNumber);
-				result_ptr-> OR (operand1_ptr , operand2_ptr);
-				break;
 		}
 	}
 	else if (operandState == Operand1)
@@ -248,9 +235,7 @@ CMatrix* createAndEvaluate (string s)
 			case elementWiseMultiplication:
 				result_ptr-> elementWiseMultiplication (operand1_ptr , operand2Value);
 				break;
-			case factorial:
-				result_ptr-> factorial (operand1_ptr );
-				break;
+
 			case squareRoot:
 				result_ptr->elementwisepower(operand1_ptr , operand2Value);
 				break;
@@ -370,12 +355,7 @@ void Evaluate (string s)
 			case elementWiseDivision:
 				result_ptr->elementWiseDivide(operand1_ptr , operand2_ptr);
 				break;
-			case AND:
-				result_ptr->AND(operand1_ptr , operand2_ptr);
-				break;
-			case OR:
-				result_ptr->OR(operand1_ptr , operand2_ptr);
-				break;
+
 		}
 	}
 	else if (operandState == Operand1)
