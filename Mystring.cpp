@@ -76,6 +76,17 @@ string getOperand1( string s)
     strcpy(str,temp.c_str());
     return trim(str);
  }
+
+ string getbase(string s)
+{
+    int pos1=s.find("g");
+    int pos2=s.find("(");
+
+    string string_base=s.substr(pos1+1,pos2-pos1-1);
+    char* str;
+
+    return string_base;
+}
 /*
  *
  *
@@ -144,6 +155,9 @@ int getOperation ( string s )
 		if ( s[i] == 's' && s[i+1] == 'e' && s[i+2] == 'c') { return SecFn ; }
 		if ( s[i] == 'c' && s[i+1] == 's' && s[i+2] == 'c') { return CscFn ; }
 		if ( s[i] == 'c' && s[i+1] == 'o' && s[i+2] == 't') { return CotFn ; }
+		if ( s[i] == 'l' && s[i+1] == 'o' && s[i+2] == 'g') { return LogFn ; }
+		if ( s[i] == 'l' && s[i+1] == 'n') { return ln ; }
+
 	}
 	return NoOperation ;
 }
@@ -213,5 +227,7 @@ int getColumnsNumber (string s)
 	}
 	return i/getRowsNumber(s);
 }
+
+
 
 

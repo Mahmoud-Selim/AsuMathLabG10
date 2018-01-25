@@ -10,7 +10,7 @@
 
 enum
 {
-	NoOperation,addition,subtraction,multiplication,division,transpose,elementWiseDivision,elementWisePower,Power,squareRoot,SinFn,CosFn,TanFn,SecFn,CscFn,CotFn
+	NoOperation,addition,subtraction,multiplication,division,transpose,elementWiseDivision,elementWisePower,Power,squareRoot,SinFn,CosFn,TanFn,SecFn,CscFn,CotFn,LogFn,ln
 };
 enum
 {
@@ -188,6 +188,14 @@ public:
 	 * - A function that take 1 pointers to the CMatrix class,which is the operand.
 	 * -It gets cot  of the operand and puts it in calling object Matrix.
 	 */
+
+      void _Log(CMatrix* operand1_ptr,double base );
+      /*
+      * -parameters :pointer to the matrix class , the value of the base of the log function
+      * - Return type : void
+      * It gets log of the input matrix for the input base and puts it in the calling object matrix
+      */
+
 	void transpose(CMatrix* );
 
 	/*
@@ -220,6 +228,7 @@ public:
 
 	void printMatrix(void);
 };
+
 
 
 #endif /* MATLIBRARY_H_ */

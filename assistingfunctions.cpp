@@ -88,14 +88,30 @@ CMatrix* createAndEvaluate (string s)
     string operand1 , operand2;
     int j = s.find("(");
     int k = s.find("sqrt");
-	if(j>0)
+    int z = s.find("log");
+    int w= s.find("ln");
+
+    if(j>0)
     {
         operand1 = getOperand1Bracket(s);
         std::cout<<std::endl<<" "<<operand1<<std::endl;
         if(k>0)
             operand2 = "0.5";
+        else if(z>0)
+        {
+
+        operand2=getbase(s);
+           if (operand2=="")
+                operand2="2.718281828459";
+
+        }
+
+        else if(w>0)
+            operand2="2.718281828459";
+
         else
             operand2 = "0";
+
     }
     else
     {
@@ -251,6 +267,16 @@ CMatrix* createAndEvaluate (string s)
             case CotFn:
 				result_ptr->_Cot(operand1_ptr);
 				break;
+
+            case LogFn:
+
+				result_ptr->_Log(operand1_ptr,operand2Value);
+                break;
+
+            case ln:
+                result_ptr->_Log(operand1_ptr,operand2Value);
+                break;
+
 		}
 	}
 	else if (operandState == Both)
@@ -284,14 +310,28 @@ void Evaluate (string s)
 	string operand1 , operand2;
     int j = s.find("(");
     int k = s.find("sqrt");
+    int z = s.find("log");
+     int w=  s.find("ln");
+
 	if(j>0)
     {
         operand1 = getOperand1Bracket(s);
-
+        std::cout<<std::endl<<" "<<operand1<<std::endl;
         if(k>0)
             operand2 = "0.5";
+        else if(z>0)
+        {
+            operand2=getbase(s);
+           if (operand2=="")
+                operand2="2.718281828459";
+
+
+        }
+        else if(w>0)
+            operand2="2.718281828459";
         else
             operand2 = "0";
+
     }
     else
     {
@@ -417,6 +457,15 @@ void Evaluate (string s)
             case CotFn:
 				result_ptr->_Cot(operand1_ptr);
 				break;
+
+            case LogFn:
+
+				result_ptr->_Log(operand1_ptr,operand2Value);
+                break;
+
+            case ln:
+                result_ptr->_Log(operand1_ptr,operand2Value);
+                break;
 		}
 	}
 	else if (operandState == Both)
@@ -538,6 +587,5 @@ void startMatlab(string str)
 		str1=str.substr(z+1,strlength-z); // getting last command
 		startOperation(str1); //call startOperation for last command
 }
-
 
 

@@ -263,7 +263,6 @@
 	     		cout<<a[i][j]<<"	";
 	     	}
 	     	cout<<endl;
-
 	     }*/
 
 
@@ -520,6 +519,23 @@
                 }
         	}
 	}
+
+	void CMatrix::_Log( CMatrix* operand1_ptr ,double base)
+	{
+	     unsigned long i,j;
+        double** operand1Matrix_ptr = operand1_ptr->matrix_ptr;
+
+	    for(i=0;i<rowsNumber;i++)
+        {
+            for(j=0;j<columnsNumber;j++)
+            {
+                matrix_ptr[i][j] =log(operand1Matrix_ptr[i][j])/log(base);
+            }
+        }
+
+
+	}
+///////////////////////////////////////////////////////////////////////////////////
 
         /*void CMatrix::transpose(CMatrix* operand_ptr)
         {

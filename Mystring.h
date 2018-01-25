@@ -26,7 +26,13 @@ string getOperand1( string s);
 string getOperand1Bracket( string s);
 /*
  * parameters :input string
- * return type: string containg first operand if it is included between brackets
+ * return type: string containing first operand if it is included between brackets
+ */
+
+ string getbase(string s);
+ /*
+ *parameters :input string
+ *return type : string containing the base of the logarithmic function
  */
 string getOperand2( string s);
 /*
@@ -60,3 +66,4 @@ int getColumnsNumber (string s);
  */
 
 #endif /* MYSTRING_H_ */
+
