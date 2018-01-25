@@ -66,3 +66,4 @@ int getColumnsNumber (string s);
  */
 
 #endif /* MYSTRING_H_ */
+
