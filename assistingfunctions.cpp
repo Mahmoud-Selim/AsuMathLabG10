@@ -224,6 +224,10 @@ CMatrix* createAndEvaluate (string s)
 				result_ptr = INSERT(ID , rowsNumber ,columnsNumber);
 				result_ptr->elementwisepower(operand1_ptr , operand2_ptr);
 				break;
+			case elementWiseMultiplication:
+				result_ptr-> elementWiseMultiplication (operand1_ptr , operand2Value);
+				break;
+				
 			case AND:
 				rowsNumber    = operand1_ptr->getRowsNumber();
 				columnsNumber = operand1_ptr->getColumnsNumber();
@@ -481,6 +485,18 @@ void Evaluate (string s)
             		case Power:
                  		result_ptr->power(operand1_ptr , operand2Value );
                  		break;
+				
+			case addition:
+				result_ptr-> elementWiseAddition (operand1_ptr , operand2Value);
+				break;
+				
+			case subtraction:	
+				result_ptr-> elementWiseSubtraction (operand1_ptr , operand2Value, operationMode);
+				break;
+				
+			case elementWiseMultiplication:
+				result_ptr-> elementWiseMultiplication (operand1_ptr , operand2Value);
+				break;	
 				
             		case squareRoot:
                  		result_ptr->elementwisepower(operand1_ptr , operand2Value );
