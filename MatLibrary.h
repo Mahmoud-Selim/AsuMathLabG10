@@ -247,6 +247,22 @@ public:
 	 * -It gets the factorial of the operand and puts it in calling object Matrix.
 	 */
 	void factorial ( CMatrix* );
+	 /*
+	 * Adding a number to a matrix elements 
+	 */
+	void elementWiseAddition(CMatrix* operand1_ptr , double operand2  );
+	/*
+	 * Subtracting a number from matrix elements ( reverse operation is consired with the order of subtraction )
+	 */
+	void elementWiseSubtraction(CMatrix* operand1_ptr , double operand2 , int operation );
+	/*
+	 * Element wise multiplication for a matrix and a number
+	 */
+	void elementWiseMultiplication(CMatrix* operand1_ptr , double operand2  );
+	/*
+	 * Element wise multiplication for two matricies
+	 */
+	void elementWiseMultiplication(CMatrix* operand1_ptr , CMatrix* operand2_ptr );
 	~CMatrix(void);
 
 
