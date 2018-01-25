@@ -147,7 +147,7 @@ int getOperation ( string s )
 		if ( s[i] == '\'' ) { return transpose;}
 		if ( s[i] == '^' ) { return Power;}
 		if ( s[i] == '.' && s[i+1] == '/') {return elementWiseDivision;}
-        if ( s[i] == '.' && s[i+1] == '^') {return elementWisePower;}
+     		if ( s[i] == '.' && s[i+1] == '^') {return elementWisePower;}
 		if ( s[i] == 's' && s[i+1] == 'q' ) { return squareRoot ; }
 		if ( s[i] == 's' && s[i+1] == 'i' && s[i+2] == 'n' ) { return SinFn ; }
 		if ( s[i] == 'c' && s[i+1] == 'o' && s[i+2] == 's') { return CosFn ; }
@@ -157,6 +157,9 @@ int getOperation ( string s )
 		if ( s[i] == 'c' && s[i+1] == 'o' && s[i+2] == 't') { return CotFn ; }
 		if ( s[i] == 'l' && s[i+1] == 'o' && s[i+2] == 'g') { return LogFn ; }
 		if ( s[i] == 'l' && s[i+1] == 'n') { return ln ; }
+		if ( s[i] == '&' ) { return AND ; }
+		if ( s[i] == '|' ) { return OR ; }
+		if ( s[i] == 'f' && s[i+1] == 'a' && s[i+2] == 'c') { return factorial ; }
 
 	}
 	return NoOperation ;
