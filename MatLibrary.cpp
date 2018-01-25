@@ -302,14 +302,14 @@
     if((operand1_ptr->rowsNumber==1)&&(operand1_ptr->columnsNumber==1)&&(value-valueINT))
     {
         matrix_ptr[0][0]=pow(operand1_ptr->matrix_ptr[0][0],value);
-            
+
     }
     else if (value == 0)
         for(i=0;i<rowsNumber;i++)
             {
                 for(j=0;j<columnsNumber;j++)
                 {
-                    
+
                 matrix_ptr[i][j]=(i==j)?1.0:0.0;
                 }
             }
@@ -403,11 +403,11 @@
             {
                 for(j=0;j<columnsNumber;j++)
                 {
-                    
+
                 matrix_ptr[i][j]=operand1_ptr->matrix_ptr[i][j];
                 }
             }
-            
+
 
     }
     void CMatrix::power(double operandV,double value2)
@@ -433,6 +433,94 @@
             for(unsigned int j=0;j<operand1_ptr->columnsNumber;j++)
                 matrix_ptr[i][j]=pow(operand1_ptr->matrix_ptr[i][j],operand2_ptr->matrix_ptr[i][j]);
     }
+
+       void CMatrix::_Sin(CMatrix* operand1_ptr )
+	{
+		unsigned long i , j;
+        double** p1 = operand1_ptr->matrix_ptr;
+
+        	for (i = 0; i < rowsNumber ; i++)
+        	{
+                for (j = 0 ; j < columnsNumber ; j++ )
+                {
+                	matrix_ptr[i][j] = sin(p1[i][j]) ;
+
+                }
+        	}
+	}
+
+	   void CMatrix::_Cos(CMatrix* operand1_ptr )
+	{
+		unsigned long i , j;
+        double** p1 = operand1_ptr->matrix_ptr;
+
+        	for (i = 0; i < rowsNumber ; i++)
+        	{
+                for (j = 0 ; j < columnsNumber ; j++ )
+                {
+                	matrix_ptr[i][j] = cos(p1[i][j]) ;
+
+                }
+        	}
+	}
+
+	   void CMatrix::_Tan(CMatrix* operand1_ptr )
+	{
+		unsigned long i , j;
+        double** p1 = operand1_ptr->matrix_ptr;
+
+        	for (i = 0; i < rowsNumber ; i++)
+        	{
+                for (j = 0 ; j < columnsNumber ; j++ )
+                {
+                	matrix_ptr[i][j] = tan(p1[i][j]) ;
+
+                }
+        	}
+	}
+	      void CMatrix::_Csc(CMatrix* operand1_ptr )
+	{
+		unsigned long i , j;
+        double** p1 = operand1_ptr->matrix_ptr;
+
+        	for (i = 0; i < rowsNumber ; i++)
+        	{
+                for (j = 0 ; j < columnsNumber ; j++ )
+                {
+                	matrix_ptr[i][j] =1/sin(p1[i][j]) ;
+
+                }
+        	}
+	}
+	   void CMatrix::_Sec(CMatrix* operand1_ptr )
+	{
+		unsigned long i , j;
+        double** p1 = operand1_ptr->matrix_ptr;
+
+        	for (i = 0; i < rowsNumber ; i++)
+        	{
+                for (j = 0 ; j < columnsNumber ; j++ )
+                {
+                	matrix_ptr[i][j] =1/cos(p1[i][j]) ;
+
+                }
+        	}
+	}
+	  void CMatrix::_Cot(CMatrix* operand1_ptr )
+	{
+		unsigned long i , j;
+        double** p1 = operand1_ptr->matrix_ptr;
+
+        	for (i = 0; i < rowsNumber ; i++)
+        	{
+                for (j = 0 ; j < columnsNumber ; j++ )
+                {
+                	matrix_ptr[i][j] = 1/tan(p1[i][j]) ;
+
+                }
+        	}
+	}
+
         /*void CMatrix::transpose(CMatrix* operand_ptr)
         {
                 unsigned long i,j;

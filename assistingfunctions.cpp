@@ -92,10 +92,10 @@ CMatrix* createAndEvaluate (string s)
     {
         operand1 = getOperand1Bracket(s);
         std::cout<<std::endl<<" "<<operand1<<std::endl;
-        if(k)
+        if(k>0)
             operand2 = "0.5";
         else
-            operand2 = getOperand2(s);
+            operand2 = "0";
     }
     else
     {
@@ -226,12 +226,30 @@ CMatrix* createAndEvaluate (string s)
 			case elementWisePower:
 				result_ptr->elementwisepower(operand1_ptr , operand2Value);
 				break;
-                
+
             case Power:
                  result_ptr->power(operand1_ptr , operand2Value );
                  break;
 			case squareRoot:
 				result_ptr->elementwisepower(operand1_ptr , operand2Value);
+				break;
+            case SinFn:
+				result_ptr->_Sin(operand1_ptr);
+				break;
+            case CosFn:
+				result_ptr->_Cos(operand1_ptr);
+				break;
+            case TanFn:
+				result_ptr->_Tan(operand1_ptr);
+				break;
+            case SecFn:
+				result_ptr->_Sec(operand1_ptr);
+				break;
+            case CscFn:
+				result_ptr->_Csc(operand1_ptr);
+				break;
+            case CotFn:
+				result_ptr->_Cot(operand1_ptr);
 				break;
 		}
 	}
@@ -269,11 +287,11 @@ void Evaluate (string s)
 	if(j>0)
     {
         operand1 = getOperand1Bracket(s);
-        
+
         if(k>0)
             operand2 = "0.5";
         else
-            operand2 = getOperand2(s);
+            operand2 = "0";
     }
     else
     {
@@ -381,6 +399,24 @@ void Evaluate (string s)
             case squareRoot:
                  result_ptr->elementwisepower(operand1_ptr , operand2Value );
                  break;
+            case SinFn:
+				result_ptr->_Sin(operand1_ptr);
+				break;
+            case CosFn:
+				result_ptr->_Cos(operand1_ptr);
+				break;
+            case TanFn:
+				result_ptr->_Tan(operand1_ptr);
+				break;
+            case SecFn:
+				result_ptr->_Sec(operand1_ptr);
+				break;
+            case CscFn:
+				result_ptr->_Csc(operand1_ptr);
+				break;
+            case CotFn:
+				result_ptr->_Cot(operand1_ptr);
+				break;
 		}
 	}
 	else if (operandState == Both)
