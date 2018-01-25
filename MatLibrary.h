@@ -10,7 +10,7 @@
 
 enum
 {
-	NoOperation,addition,subtraction,multiplication,division,transpose,elementWiseDivision,elementWisePower,Power,squareRoot,SinFn,CosFn,TanFn,SecFn,CscFn,CotFn,LogFn,ln
+	NoOperation,addition,subtraction,multiplication,division,transpose,elementWiseDivision,elementWisePower,Power,squareRoot,SinFn,CosFn,TanFn,SecFn,CscFn,CotFn,LogFn,ln,elementWiseMultiplication,OR,AND,factorial
 };
 enum
 {
@@ -222,11 +222,37 @@ public:
 
 	void elementWiseDivide(CMatrix* operand1_ptr , CMatrix* operand2_ptr);
 	void elementWiseDivide(CMatrix* operand1_ptr , double operand2 , int operation);
+	 /*
+	 * -Parameters  : 2 pointers to the matrix class.
+	 * -Return type : void.
+	 * -A function that takes 2 pointers to the CMatrix class,the first one is
+	 *   operand1 and the second one is operand2.
+	 * -It operates a logical and betweeen every element in operand 1 and the corresponding 
+	 *   element in operand 2, and puts the result in the calling object matrix 
+	 */
+	void AND ( CMatrix* , CMatrix* );
+	 /*
+	 * -Parameters  : 2 pointers to the matrix class.
+	 * -Return type : void.
+	 * -A function that takes 2 pointers to the CMatrix class,the first one is
+	 *   operand1 and the second one is operand2.
+	 * -It operates a logical or betweeen every element in operand 1 and the corresponding 
+	 *   element in operand 2, and puts the result in the calling object matrix
+	 */
+	void OR ( CMatrix* , CMatrix* );
+	 /*
+	 * -Parameters  : 1 pointers to the matrix class.
+	 * -Return type : void.
+	 * -A function that takes 1 pointers to the CMatrix class,which is the operand.
+	 * -It gets the factorial of the operand and puts it in calling object Matrix.
+	 */
+	void factorial ( CMatrix* );
 	~CMatrix(void);
 
 
 
 	void printMatrix(void);
+
 };
 
 
