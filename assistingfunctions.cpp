@@ -88,14 +88,30 @@ CMatrix* createAndEvaluate (string s)
     string operand1 , operand2;
     int j = s.find("(");
     int k = s.find("sqrt");
-	if(j>0)
+    int z = s.find("log");
+    int w= s.find("ln");
+
+    if(j>0)
     {
         operand1 = getOperand1Bracket(s);
         std::cout<<std::endl<<" "<<operand1<<std::endl;
-        if(k)
+        if(k>0)
             operand2 = "0.5";
+        else if(z>0)
+        {
+
+        operand2=getbase(s);
+           if (operand2=="")
+                operand2="2.718281828459";
+
+        }
+
+        else if(w>0)
+            operand2="2.718281828459";
+
         else
-            operand2 = getOperand2(s);
+            operand2 = "0";
+
     }
     else
     {
@@ -226,13 +242,41 @@ CMatrix* createAndEvaluate (string s)
 			case elementWisePower:
 				result_ptr->elementwisepower(operand1_ptr , operand2Value);
 				break;
-                
+
             case Power:
                  result_ptr->power(operand1_ptr , operand2Value );
                  break;
 			case squareRoot:
 				result_ptr->elementwisepower(operand1_ptr , operand2Value);
 				break;
+            case SinFn:
+				result_ptr->_Sin(operand1_ptr);
+				break;
+            case CosFn:
+				result_ptr->_Cos(operand1_ptr);
+				break;
+            case TanFn:
+				result_ptr->_Tan(operand1_ptr);
+				break;
+            case SecFn:
+				result_ptr->_Sec(operand1_ptr);
+				break;
+            case CscFn:
+				result_ptr->_Csc(operand1_ptr);
+				break;
+            case CotFn:
+				result_ptr->_Cot(operand1_ptr);
+				break;
+
+            case LogFn:
+
+				result_ptr->_Log(operand1_ptr,operand2Value);
+                break;
+
+            case ln:
+                result_ptr->_Log(operand1_ptr,operand2Value);
+                break;
+
 		}
 	}
 	else if (operandState == Both)
@@ -266,14 +310,28 @@ void Evaluate (string s)
 	string operand1 , operand2;
     int j = s.find("(");
     int k = s.find("sqrt");
+    int z = s.find("log");
+     int w=  s.find("ln");
+
 	if(j>0)
     {
         operand1 = getOperand1Bracket(s);
-        
+        std::cout<<std::endl<<" "<<operand1<<std::endl;
         if(k>0)
             operand2 = "0.5";
+        else if(z>0)
+        {
+            operand2=getbase(s);
+           if (operand2=="")
+                operand2="2.718281828459";
+
+
+        }
+        else if(w>0)
+            operand2="2.718281828459";
         else
-            operand2 = getOperand2(s);
+            operand2 = "0";
+
     }
     else
     {
@@ -381,6 +439,33 @@ void Evaluate (string s)
             case squareRoot:
                  result_ptr->elementwisepower(operand1_ptr , operand2Value );
                  break;
+            case SinFn:
+				result_ptr->_Sin(operand1_ptr);
+				break;
+            case CosFn:
+				result_ptr->_Cos(operand1_ptr);
+				break;
+            case TanFn:
+				result_ptr->_Tan(operand1_ptr);
+				break;
+            case SecFn:
+				result_ptr->_Sec(operand1_ptr);
+				break;
+            case CscFn:
+				result_ptr->_Csc(operand1_ptr);
+				break;
+            case CotFn:
+				result_ptr->_Cot(operand1_ptr);
+				break;
+
+            case LogFn:
+
+				result_ptr->_Log(operand1_ptr,operand2Value);
+                break;
+
+            case ln:
+                result_ptr->_Log(operand1_ptr,operand2Value);
+                break;
 		}
 	}
 	else if (operandState == Both)
