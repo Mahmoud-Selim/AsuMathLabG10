@@ -10,7 +10,7 @@
 
 enum
 {
-	NoOperation,addition,subtraction,multiplication,division,transpose,elementWiseDivision,elementWisePower,Power,squareRoot,SinFn,CosFn,TanFn,SecFn,CscFn,CotFn,LogFn,ln,elementWiseMultiplication,OR,AND,factorial
+	NoOperation,addition,subtraction,multiplication,division,transpose,elementWiseDivision,elementWisePower,Power,squareRoot,SinFn,CosFn,TanFn,SecFn,CscFn,CotFn,LogFn,ln,elementWiseMultiplication,OR,AND,factorial,zeros,ones,eye,Rand
 };
 enum
 {
@@ -264,6 +264,32 @@ public:
 	 */
 	void elementWiseMultiplication(CMatrix* operand1_ptr , CMatrix* operand2_ptr );
 	~CMatrix(void);
+	
+	void zeros (int nR,int nC);
+	/*
+	* -Parameters : 2 integers represent the number of rows and columns of the zero matrix
+	* -Return type : void
+	* -A function that makes a matrix its rows and columns equals to nR & nC and fill all the elements with zero
+	*/
+	void ones (int nR,int nC);
+	/*
+	* -Parameters : 2 integers represent the number of rows and columns of the zero matrix
+	* -Return type : matrix
+	* -A function that makes a matrix its rows and columns equals to nR & nC and fill all the elements with ones
+	*/
+	void eye (int nR,int nC);
+	/*
+	* -Parameters : 2 integers represent the number of rows and columns of the zero matrix
+	* -Return type : matrix
+	* -A function that makes an eye matrix its rows and columns equals to nR & nC and the fn chech if nR & nC are equal
+	to see if its valid to be done
+	*/
+	void Rand (int nR,int nC);
+	/*
+	* -Parameters : 2 integers represent the number of rows and columns of the zero matrix
+	* -Return type : matrix
+	* -A function that makes a matrix its rows and columns equals to nR & nC and fill the matrix elements with random values
+	*/
 
 
 

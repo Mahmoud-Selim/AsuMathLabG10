@@ -8,6 +8,7 @@
 #include "Mystring.h"
 #include "MatLibrary.h"
 #include "linked.h"
+#include <cstdlib>
 char* trim(char* text)
 {
 	char* p = text + strlen(text) - 1;//pointing pointer to the end of the string
@@ -160,6 +161,14 @@ int getOperation ( string s )
 		if ( s[i] == '&' ) { return AND ; }
 		if ( s[i] == '|' ) { return OR ; }
 		if ( s[i] == 'f' && s[i+1] == 'a' && s[i+2] == 'c') { return factorial ; }
+		if ((s[i] == 'o')&&(s[i+1] == 'n')&&(s[i+2] == 'e')&&(s[i+3] == 's'))
+		{return ones;}
+		if (s[i] == 'z'&&s[i+1] == 'e'&&s[i+2] == 'r'&&s[i+3] == 'o'&&s[i+4] == 's')
+		{return zeros;}
+		if (s[i] == 'e'&&s[i+1] == 'y'&&s[i+2] == 'e')
+		{return eye;}
+		if (s[i] == 'r'&&s[i+1] == 'a'&&s[i+2] == 'n'&&s[i+3] == 'd')
+		{return Rand;}
 
 	}
 	return NoOperation ;
@@ -173,6 +182,19 @@ int getOperation ( string s )
 
 int getRowsNumber ( string s )
 {
+	if (getOperation (s) ==zeros ||getOperation (s) ==eye||getOperation (s) ==Rand||getOperation (s) ==ones)
+	{
+	int f=0,n=0;;
+	int nR=0,nC=0;
+	f=s.find ("(");
+	f++;
+	n=s.find(",");
+	string x=s.substr(f,f-n);
+	nR=atoi(x.c_str());
+	return nR;
+	}
+	else
+	{
 	int i=0 , flag;//counter
 	char *text=new char [s.length()+1];
 	strcpy(text,s.c_str()); //converting string into array of characters
@@ -208,6 +230,7 @@ int getRowsNumber ( string s )
 		}
 	}
 	return i-1;
+	}
 }
 /*
  *
@@ -217,6 +240,21 @@ int getRowsNumber ( string s )
  */
 int getColumnsNumber (string s)
 {
+	if (getOperation (s) ==zeros ||getOperation (s) ==eye||getOperation (s) ==Rand||getOperation (s) ==ones)
+	{
+	int f=0,n=0;
+	int nR=0,nC=0;
+	f=s.find ("(");
+	f++;
+	n=s.find(",");
+n++;
+f=s.find (")");
+	string x=s.substr(n,f-n);
+	nC=atoi(x.c_str());
+	return nC;
+	}
+	else
+	{
 	int i=-1;
 	char *text=new char [s.length()+1];
 	strcpy(text,s.c_str()); //converting string into array of characters
@@ -230,7 +268,7 @@ int getColumnsNumber (string s)
 	}
 	return i/getRowsNumber(s);
 }
-
+}
 
 
 

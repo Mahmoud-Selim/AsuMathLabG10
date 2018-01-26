@@ -10,6 +10,7 @@
 #include <iostream>
 #include <iomanip>
 #include <math.h>
+#include "stdlib.h"
 	CMatrix::CMatrix()
 	{
 		rowsNumber    = 0;
@@ -1164,6 +1165,69 @@
 				}
 			}
 	}
+	void CMatrix :: zeros(int nR,int nC)
+{
+	if ((nR*nC) == 0) { matrix_ptr = NULL; throw ("invalid"); return; }
+
+	//matrix_ptr = new double* [nR];
+
+	for (int i = 0; i < nR; i++)
+	{
+		for (int j = 0; j < nC; j++)
+		{
+			matrix_ptr[i][j] = 0;
+		}
+	}
+}
+	void CMatrix :: ones (int nR,int nC)
+{
+    if ((nR*nC) == 0) { matrix_ptr = NULL; throw ("invalid");return; }
+	for (int i = 0; i < nR; i++)
+	{
+		for (int j = 0; j < nC; j++)
+		{
+			matrix_ptr[i][j] = 1;
+		}
+	}
+}
+
+	void CMatrix :: Rand (int nR,int nC)
+{
+    if ((nR*nC) == 0) { matrix_ptr = NULL; throw ("invalid");return; }
+
+	for (int i = 0; i < nR; i++)
+	{
+		for (int j = 0; j < nC; j++)
+		{
+			matrix_ptr[i][j] = rand()%100 + 1;
+		}
+	}
+}
+void CMatrix :: eye (int nR,int nC)
+{
+    if ((nR*nC) == 0||(nR!=nC)) { matrix_ptr = NULL; throw ("invalid");return; }
+	if (nR==nC&&nC==1)
+	{
+		matrix_ptr [0][0]=1;
+	}
+else{
+	for (int i = 0; i < nR; i++)
+	{
+		for (int j = 0; j < nC; j++)
+		{
+		    if(i==j)
+			{
+			    matrix_ptr[i][j] =1 ;
+			}
+			else
+			{
+           matrix_ptr[i][j] =0 ;
+			}
+		}
+	}
+}
+}
+
 
 
 
