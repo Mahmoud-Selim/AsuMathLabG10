@@ -98,7 +98,6 @@ CMatrix* createAndEvaluate (string s)
      if(j>0 && o<0 && ze<0 && e<0 && r<0)
     {
         operand1 = getOperand1Bracket(s);
-        std::cout<<std::endl<<" "<<operand1<<std::endl;
         if(k>0)
             operand2 = "0.5";
         else if(z>0)
@@ -382,7 +381,6 @@ void Evaluate (string s)
 	 if(j>0 && o<0 && ze<0 && e<0 && r<0)
     {
         operand1 = getOperand1Bracket(s);
-        std::cout<<std::endl<<" "<<operand1<<std::endl;
         if(k>0)
             operand2 = "0.5";
         else if(z>0)
