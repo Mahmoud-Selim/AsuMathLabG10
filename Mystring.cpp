@@ -35,7 +35,7 @@ string getOperand1( string s)
 	char *text=new char [s.length()+1];
 	strcpy(text,s.c_str());
 	char *ttext =trim(text);
-	char separators[] = "=+-*/\'^ ";
+	char separators[] = "=+-*/\'^&| ";
 	char* token = strtok(ttext, separators);
 	if (getOperation(s) == NoOperation)
 	{
@@ -100,8 +100,8 @@ string getOperand2( string s)
 	char *text=new char [s.length()+1];
 	strcpy(text,s.c_str()); //converting string into array of characters
 	char *ttext =trim(text);//trimmed array
-	char spearators[] = "=+-*\'/.^ ";
-	char separators [] = "=+-*\'/^ ";
+	char spearators[] = "=+-*\'/.^&| ";
+	char separators [] = "=+-*\'/^&| ";
 	char* token = strtok(ttext, spearators);
 	while(token)
 	{
