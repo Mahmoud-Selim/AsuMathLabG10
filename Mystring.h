@@ -10,8 +10,10 @@
 #include <string>
 #include <string.h>
 #include <iostream>
+
+#include "MatLibrary.h"
 using namespace std;
-char * Mytrim(char* text);
+char * trim(char* text);
  /*
   * function used to trim string
   * parameter: input address of an array of string
@@ -64,6 +66,9 @@ int getColumnsNumber (string s);
  * input: string containing matrix
  * return :int number of columns
  */
+bool isOperation(char s);
+bool isTringometric(string s);
 
 #endif /* MYSTRING_H_ */
+
 
