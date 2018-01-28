@@ -10,7 +10,7 @@
 
 enum
 {
-	NoOperation,addition,subtraction,multiplication,division,transpose,elementWiseDivision,elementWisePower,Power,squareRoot,SinFn,CosFn,TanFn,SecFn,CscFn,CotFn,LogFn,ln,elementWiseMultiplication,OR,AND,factorial,zeros,ones,eye,Rand
+	NoOperation,addition,subtraction,multiplication,division,transpose,elementWiseSubtraction,elementWiseAddition,elementWiseDivision,elementWisePower,Power,squareRoot,SinFn,CosFn,TanFn,SecFn,CscFn,CotFn,LogFn,ln,elementWiseMultiplication,OR,AND,factorial,zeros,ones,eye,Rand
 };
 enum
 {
