@@ -10,27 +10,114 @@
 #include "linked.h"
 #include "cstdlib"
 #include <string>
+#include "AdvancedMatrixString.h"
+#include "AdvancedNumbersString.h"
 using namespace std;
-void extractAndAssign (string s, CMatrix* M, unsigned long noRows, unsigned long noCoulmns)
+
+void extractAndAssign (string s, double** matrix_ptr, unsigned long rowsIterator, unsigned long columnsIterator)
 {
-    int loc1    = s.find("[") ;
-    int loc2    = s.find("]") ;
-    string text = s.substr(loc1 + 1 , loc2-loc1-1);
-    char* C_text = new char[text.length()+1];
-    strcpy(C_text , text.c_str());
-    C_text = trim(C_text);
-    double** mPtr = M->getMatrixPtr();
-    char separators[] = " ;,";
-    char* token = strtok(C_text, separators);
-    for (unsigned int i=0; i<noRows ; i++)
-    {
-        for(unsigned int y=0; y<noCoulmns; y++)
-        {
-            mPtr[i][y] = atof(token);
-            token = strtok(NULL, separators);
-        }
-    }
-   // delete[] C_text;
+	unsigned long i, k = 1, increaseRowsBy = 0;
+	unsigned long startingColumn = columnsIterator;
+	//double **matrix_ptr = M->getMatrixPtr();
+	std::string accumlator;
+	for(i = s.find('[') + 1; i < s.length(); i++)
+	{
+		if(s[i] == ';' && k == 1)
+		{
+			rowsIterator += increaseRowsBy;
+			columnsIterator = startingColumn;
+			continue;
+		}
+		if(s[i] == ' ' || s[i] == ',')
+			continue;
+		else if(s[i] == '[')
+		{
+			k++;
+	//		continue;
+		}
+		else if(s[i] == ']')
+		{
+			k--;
+	//		continue;
+		}
+		else
+		{
+			do
+			{
+				accumlator += s[i++];
+			}
+			while(s[i] != ' ' && s[i] != ';' && s[i] != ']' && s[i] != '[');
+			i--;
+		}
+		if(((accumlator[0] >= '0' && accumlator[0] <= '9') || accumlator[0] == '-') && k == 1)
+		{
+			matrix_ptr[rowsIterator][columnsIterator] = (double)atof(accumlator.c_str());
+			accumlator = "";
+			columnsIterator++;
+			increaseRowsBy = 1;
+		}
+		else if ((accumlator[0] >= 'a' && accumlator[0] <= 'z') || (accumlator[0] >= 'A' && accumlator[0] <= 'Z') || accumlator[0] == '#')
+		{
+			CMatrix *matrix = ISEXISTING(accumlator);
+			increaseRowsBy = matrix->getRowsNumber();
+			double **internalMatrix_ptr = matrix->getMatrixPtr();
+			for(unsigned long rowsCounter = 0; rowsCounter < matrix->getRowsNumber(); rowsCounter++)
+			{
+				for(unsigned long columnsCounter = 0; columnsCounter <  matrix->getColumnsNumber(); columnsCounter++)
+				{
+					matrix_ptr[rowsIterator+rowsCounter][columnsIterator+columnsCounter] =
+											internalMatrix_ptr[rowsCounter][columnsCounter];
+				}
+			}
+			columnsIterator += matrix->getColumnsNumber();
+			accumlator = "";
+		}
+		else if ( k > 1)
+		{
+			//accumlator = s.substr(i,s.find(']',i)-i);
+			//accumlator = s.substr(i+1,s.find(']',i)-i+1);
+			unsigned int accumlatorLength = 0;
+			while(k != 1)
+			{
+				accumlatorLength++;
+				if(s[i+accumlatorLength] == '[')
+				{
+					k++;
+				}
+				else if (s[i+accumlatorLength] == ']')
+				{
+					k--;
+				}
+				if(k == 1)
+					break;
+			}
+			accumlator = s.substr(i,accumlatorLength+1);
+			unsigned long accumlatorRowsNumber    = getRowsNumber(accumlator);
+			unsigned long accumlatorColumnsNumber = getColumnsNumber(accumlator);
+			extractAndAssign(accumlator, matrix_ptr, rowsIterator, columnsIterator);
+/*			char* Caccumlator = new char[accumlator.length()+1];
+			strcpy(Caccumlator,accumlator.c_str());
+			char separators[] = "], ;";
+			char *token = strtok(Caccumlator, separators);
+			for(unsigned long rowsCounter = 0; rowsCounter < accumlatorRowsNumber; rowsCounter++)
+			{
+				for(unsigned long columnsCounter = 0; columnsCounter < accumlatorColumnsNumber; columnsCounter++)
+				{
+					if(!(rowsCounter == 0 && columnsCounter == 0))
+					{
+						token = strtok(NULL, separators);
+					}
+					matrix_ptr[rowsIterator+rowsCounter][columnsIterator+columnsCounter] = atof(token);
+
+				}
+			}
+			*/
+			columnsIterator += accumlatorColumnsNumber;
+			increaseRowsBy = accumlatorRowsNumber;
+			i += accumlator.length() - 1;
+			accumlator = "";
+		}
+	}
 }
 
 CMatrix* createAndAssign(string s)
@@ -43,7 +130,8 @@ CMatrix* createAndAssign(string s)
 		unsigned long rowsNumber    = getRowsNumber(s);
 		unsigned long columnsNumber = getColumnsNumber(s);
 		result_ptr = INSERT(ID , rowsNumber , columnsNumber);
-		extractAndAssign(s , result_ptr , rowsNumber , columnsNumber);
+		double** matrix_ptr = result_ptr->getMatrixPtr();
+		extractAndAssign(s , matrix_ptr , 0 , 0);
 	}
 	else
 	{
@@ -65,7 +153,16 @@ void assignMatrix (string s)
 	{
 		unsigned long rowsNumber    = getRowsNumber(s);
 		unsigned long columnsNumber = getColumnsNumber(s);
-		extractAndAssign(s , result , rowsNumber , columnsNumber);
+		if(rowsNumber != result->getRowsNumber() || columnsNumber != result->getColumnsNumber())
+		{
+			CMatrix TempMatrix(rowsNumber, columnsNumber);
+			double **TempMatrix_ptr = TempMatrix.getMatrixPtr();
+			extractAndAssign(s,TempMatrix_ptr, 0, 0);
+			result->copy(&TempMatrix);
+			return;
+		}
+		double** matrix_ptr = result->getMatrixPtr();
+		extractAndAssign(s , matrix_ptr, 0, 0);
 	}
 	else
 	{
@@ -98,6 +195,7 @@ CMatrix* createAndEvaluate (string s)
      if(j>0 && o<0 && ze<0 && e<0 && r<0)
     {
         operand1 = getOperand1Bracket(s);
+        std::cout<<std::endl<<" "<<operand1<<std::endl;
         if(k>0)
             operand2 = "0.5";
         else if(z>0)
@@ -381,6 +479,7 @@ void Evaluate (string s)
 	 if(j>0 && o<0 && ze<0 && e<0 && r<0)
     {
         operand1 = getOperand1Bracket(s);
+        std::cout<<std::endl<<" "<<operand1<<std::endl;
         if(k>0)
             operand2 = "0.5";
         else if(z>0)
@@ -608,6 +707,7 @@ if  (o>0|| ze>0|| e>0|| r>0)
 }
 void startOperation(string s)
 {
+	unsigned long i = 0;
 	char* C_S = new char[s.length()+1];
 	strcpy(C_S , s.c_str());
 	C_S = trim(C_S);
@@ -617,36 +717,55 @@ void startOperation(string s)
 	}
 	string ID = getID(C_S);
 	CMatrix* result_ptr = ISEXISTING(ID);
-	int operation = getOperation(s);
-	if (operation == NoOperation)
+	try
 	{
-		if (result_ptr == NULL)
+		if ((int)s.find('=') > 0)
 		{
-			result_ptr = createAndAssign(s);
-		}
-		else
-		{
-			assignMatrix(s);
-		}
-	}
-	else
-	{
-		try
-		{
-			if (result_ptr == NULL)
+			int operation = getOperation(s);
+			if (operation == NoOperation)
 			{
-				result_ptr = createAndEvaluate(s);
+				s = s.substr(0,s.find('=')+1) + '[' + s.substr(s.find('=')+1) + ']';
+				if (result_ptr == NULL)
+				{
+					result_ptr = createAndAssign(s);
+				}
+				else
+				{
+					assignMatrix(s);
+				}
 			}
 			else
 			{
-				Evaluate(s);
+				for(i = s.length()-1 ; i > 0 ; i--)
+				{
+					if(s[i] ==' ')
+					{
+						continue;
+					}
+					if(s[i] =='+')
+					{
+						throw("Error... Invalid expression");
+					}
+					else
+					{
+						break;
+					}
+				}
+				if (result_ptr == NULL)
+				{
+					result_ptr = createAndEvaluate(s);
+				}
+				else
+				{
+					Evaluate(s);
+				}
 			}
 		}
-		catch(char const* Error )
-		{
+	}
+	catch(char const* Error )
+	{
 			std::cout<<Error<<std::endl;
 			return;
-		}
 	}
 	if(C_S[strlen(C_S)-1] != ';')
 	{
@@ -658,6 +777,21 @@ void startOperation(string s)
 void start_f(string lineStr)
 {
 	static string s = "";
+	unsigned long i,j = 0; static int missingbracelinestr = 0;
+	if(missingbracelinestr == 1)
+	{
+		for(i = 0; i < lineStr.length(); i++)
+		{
+			if(lineStr[i] == ' ')
+				continue;
+			else if(lineStr[i] != ';')
+			{
+				s = s + ';';
+				missingbracelinestr = 0;
+				break;
+			}
+		}
+	}
 	if (lineStr[lineStr.length()-1] == '\r' || lineStr[lineStr.length()-1] == '\n')
 	{
 		s += lineStr.substr(0,lineStr.length()-1);
@@ -666,15 +800,48 @@ void start_f(string lineStr)
 	{
 		s += lineStr.substr(0,lineStr.length());
 	}
-	if ( (s.find('[') != (size_t)-1) && (s.find(']') ==(size_t) -1) )
+	if (s == "\n" || s == "\r" || s == "" )
 	{
 		return;
 	}
-	if (s == "\n" || s == "\r" || s == "")
+/*	if ( (s.find('[') != (size_t)-1) && (s.find(']') ==(size_t) -1) )
 	{
 		return;
+	}*/
+	for( i = 0 ; i < (unsigned long)s.length() ; i++)
+	{
+		if(s[i] == '[')
+			j++;
+		else if(s[i] == ']')
+			j--;
 	}
-//	std::cout<<s<<std::endl;
+
+	if(j !=0)
+	{
+		unsigned int k = 0;
+		for(k = s.length()-1 ; k > 0 ; k--)
+		{
+			if(s[k] ==' ')
+				continue;
+			if(s[k] != ';')
+			{
+				missingbracelinestr = 1;
+				return;
+			}
+
+		}
+	}
+	for(i = s.length()-1 ; i > 0 ; i--)
+	{
+		if(s[i] ==' ')
+		{
+			continue;
+		}
+		if(s[i] =='+')
+		{
+			continue;
+		}
+	}
 	startMatlab(s);
 	s = "";
 }
@@ -703,7 +870,7 @@ void startMatlab(string str)
 
 					StartPos=SemiPos+1; // new start postion is last ';' postion
 
-					startOperation(str1); // call startOperation
+					complexExpressionHandler(str1); // call startOperation
 				}
 
 				counter++;
@@ -713,7 +880,113 @@ void startMatlab(string str)
 		int y=str.rfind('=',strlength); //finding last command
 		int z =str.rfind(';',y); //finding the last ';' before last command
 		str1=str.substr(z+1,strlength-z); // getting last command
-		startOperation(str1); //call startOperation for last command
+		complexExpressionHandler(str1); //call startOperation for last command
+}
+string expressionWhiteSpaceEraser(string s)
+{
+	unsigned long i, j;
+	for(i = 0; i < s.length(); i++)
+	{
+		if(s[i] == ' '&& s[i + 1] == ' ')
+		{
+			s.erase(i+1,1);
+			i -= 2;
+		}
+		if((s[i] == '(' || s[i] == '[' ||s[i] == ')' || s[i] == ']' || isOperation(s[i]))&& s[i + 1] == ' ')
+		{
+			s.erase(i+1,1);
+			i -= 2;
+		}
+		if((s[i] == '(' || s[i] == '[' ||s[i] == ')' || s[i] == ']'  || isOperation(s[i])) && s[i-1] == ' ')
+		{
+			s.erase(i-1, 1);
+			i -= 3;
+		}
+	}
+	return s;
+}
+void complexExpressionHandler(string s)
+{
+	s = expressionWhiteSpaceEraser(s);
+	int i, j, k, operation, previousNumberFlag = 0, MatOperation = 0;
+	string accumulator;
+	char previousLetter = s[s.find('[') + 1];
+	operation = getOperation(s);
+	if(operation == NoOperation)
+	{
+		for(i = s.find('[')+1; i < s.length(); i++)
+		{
+			//if(s[i] == '[' || s[i] == ']' || s[i] == ';' || s[i] == ',')
+				//continue;
+			if(s[i] != ' ' && !(s[i] == '[' || s[i] == ']' || s[i] == ';' || s[i] == ','))
+			{
+				if (accumulator == "")
+					j = i;
+				accumulator += s[i];
+				continue;
+			}
+			if(accumulator == "")
+				continue;
+			for(k = 0; k < accumulator.length(); k++)
+			{
+				if(k < (int)accumulator.length() - 6)
+				{
+					string tringometricFunction;
+					tringometricFunction = accumulator[k] + accumulator[k+1] + accumulator[k+2];
+					if (isTringometric(tringometricFunction))
+						k += 3;
+				}
+				if(isalpha(accumulator[k]))
+				{
+					MatOperation = 1;
+				}
+			}
+			if(MatOperation == 1)
+			{
+				string temp = TokenMat(accumulator);
+				s.replace(j, i-j, temp);
+				i = i - (i - j) + temp.length();
+				accumulator = "";
+				MatOperation = 0;
+			}
+			else
+			{
+				string temp = TokenNum(accumulator);
+				s.replace(j, i-j, temp);
+				i = i - (i - j) + temp.length();
+				accumulator = "";
+			}
+		}
+		startOperation(s);
+		/*if(MatOperation == 1)
+		{
+			string temp = TokenMat(accumulator);
+			s.replace(j, j-i, temp);
+			i = i - (j - i) + temp.length();
+			accumulator = "";
+		}
+		else
+		{
+			string temp = TokenNum(accumulator);
+			s.replace(j, i-j, temp);
+			i = i - (i - j) + temp.length();
+			accumulator = "";
+		}
+		startOperation(s);
+		previousLetter = s[i];*/
+	}
+	else
+	{
+		for(i = s.find('=')+1; i < s.length(); i++)
+		{
+			if(s[i] == 'A')
+			{
+				AdOperation1Mat(s);
+				return;
+			}
+		}
+		Adoperation1Num(s);
+	}
 }
 
 
