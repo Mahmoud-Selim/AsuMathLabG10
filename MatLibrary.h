@@ -299,4 +299,3 @@ public:
 
 
 #endif /* MATLIBRARY_H_ */
-

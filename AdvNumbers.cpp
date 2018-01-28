@@ -8,12 +8,13 @@
 #include"string.h"
 #include<iostream>
 #include <stdlib.h>
-#include"AdvOp.h"
+#include "AdvNumbers.h"
 #include<stdio.h>
 #include<math.h>
+#include "Mystring.h"
 using namespace std;
 //using namespace numbers ;
-int y=0;
+static int y=0;
 string Adoperation1Num(string s)
 {
 	int equalPos;string newString;int newstrPos;
@@ -31,7 +32,7 @@ string Adoperation1Num(string s)
 	{
 		s=TokenNum(s);
 	}
-	cout<<s<<endl;
+	startOperation(s);
 	return s ;
 }
 string AdoperationNum(string s)
@@ -59,8 +60,6 @@ string AdoperationNum(string s)
 				string buffer = AdoperationNum(subString);
 				int bufferPos=s.find(subString);
 				s.replace(bufferPos,subString.length(),buffer);
-			//	i=firstBracePosition-1;
-			//	s = buffer;
 			}
 			else
 			{
@@ -111,54 +110,15 @@ string AdoperationNum(string s)
 									}
 							}
 					}
-				/*
-				sLength = s.length();
-				i += subString.length () - i;
-				std::cout<<s<<std::endl;
-				flag = 0;
-				*/
-
 			}
-
 			sLength = s.length();
-			i += subString.length () - i;
-			std::cout<<s<<std::endl;
+			i = 0;
 			flag = 0;
-
 		}
 	}
 	return s;
-	//s = Token(s);
-	//std::cout<<s<<std::endl;
+}
 
-}
-void AdvOperations(string s)
-{
-	int pos1 = 0;
-	int pos2 = 0;
-	int pos3=0;
-	int pos4 =0;
-	string value ="";
-	string new_str;
-	string oldvalue;
-	while (1)
-	{
-		pos1 = s.find('(', pos3);
-		pos2 = s.find(')', pos3 +1);
-		if (pos2 < 0 || pos1<0) break;
-		new_str = s.substr(pos1+1 , pos2- pos1-1);
-		pos4 =s.find(new_str);
-		oldvalue=value;
-		value =TokenNum(new_str);
-		if(new_str==oldvalue)break;
-		s.replace(pos4, new_str.length(), value);
-		cout << s << endl;
-		pos3=s.find(')',pos3+1);
-	}
-	s = trimm(s);;
-	s=TokenNum(s);
-	cout<<s<<endl;
-}
 	string trimm(string  text)
 	{
 	int i =0;
@@ -260,7 +220,7 @@ string powerNum(string s)
 										string str2 = token2;
 										len = str2.length();
 										pos6 = s.find(token2);
-										value2 = pow_string(trimmed2); // byd5lha amslan 4/4 byt7sbha be tokens
+										value2 = pow_string(trimmed2);
 										sprintf(text, "%lf", value2);
 										s.replace(pos6, len, text);
 										j = 0;
@@ -297,7 +257,7 @@ string DivvNum(string s)
 									string str2 = token2;
 									len = str2.length();
 									pos6 = s.find(token2);
-									value2 = Div_string(trimmed2); // byd5lha amslan 4/4 byt7sbha be tokens
+									value2 = Div_string(trimmed2);
 									sprintf(text, "%lf", value2);
 									s.replace(pos6, len, text);
 									j = 0;
@@ -337,27 +297,6 @@ string DivvNum(string s)
 									char * trimmed = trim(token1);
 									string str1 = token1;
 									len = str1.length();
-									/*
-									SinPos=str1.find("sin");
-									if(SinPos>1)
-									{
-										string str2;
-										if(SinPos>i)
-										{
-											 str2=str1.substr(SinPos,len-SinPos+3);
-										}
-										else
-										{
-											str2 = str1.substr(SinPos,i-1);
-										}
-										char* Sinbuffer = new char[str2.length() + 1];
-										strcpy(Sinbuffer, s.c_str());
-										double SinValue =sin(atof(Sinbuffer));
-										sprintf(text,"%lf",SinValue);
-										double ValuePos=str1.find(str2);
-										str1.replace(SinPos,SinPos+ValuePos,text);
-									}
-									*/
 									pos6 =s.find(token1);
 									value =  Mul_string(trimmed);
 									sprintf(text, "%lf", value);
@@ -388,7 +327,6 @@ string DivvNum(string s)
 		char* separators1 = "/*-";
 		char* lineContext;
 		char* token1 = strtok_r(buffer, separators1,&lineContext);
-	//	char * trimmed =trim(token1);
 		int x=0;
 			while (token1)
 				{
@@ -493,6 +431,8 @@ string DivvNum(string s)
 			token = strtok_r(NULL, spearators,&line);
 			if (token)
 			{
+				if(atof(token) == 0)
+					throw("Can't divide by zero");
 				value =value/ atof(token);
 			}
 		}
@@ -506,7 +446,6 @@ string DivvNum(string s)
 			char* spearators = "+";
 			char* token = strtok_r(s, spearators,&line1);
 			value = atof(token);
-	//		cout<<"value"<<value<<endl;
 			while (token)
 			{
 				token = strtok_r(NULL, spearators,&line1);
@@ -558,4 +497,3 @@ string DivvNum(string s)
 				}
 				return value;
 	}
-

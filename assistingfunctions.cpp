@@ -626,6 +626,12 @@ else if ( o>0 || ze>0 || e>0 || r>0)
             		case elementWisePower:
                  		result_ptr->elementwisepower(operand1_ptr , operand2Value );
                  		break;
+			case elementWiseAddition:
+				result_ptr-> elementWiseAddition (operand1_ptr , operand2Value);
+				break;
+			case elementWiseSubtraction:	
+				result_ptr-> elementWiseSubtraction (operand1_ptr , operand2Value, operationMode);
+				break;
 				
             		case Power:
                  		result_ptr->power(operand1_ptr , operand2Value );
