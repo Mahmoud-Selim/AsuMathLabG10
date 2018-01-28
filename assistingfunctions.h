@@ -5,14 +5,17 @@
  *      Author: mahmoud
  */
 
+
+
+#ifndef ASSISTINGFUNCTIONS_H_
+#define ASSISTINGFUNCTIONS_H_
 #include <iostream>
 #include <string.h>
 #include <string>
 #include <fstream>
-using namespace std;
-#ifndef ASSISTINGFUNCTIONS_H_
-#define ASSISTINGFUNCTIONS_H_
-
+#include "AdvancedMatrixString.h"
+#include "AdvancedNumbersString.h"
+#include "MatLibrary.h"
 
 using namespace std;
 enum
@@ -29,5 +32,6 @@ string getID(string s);
 void startOperation(string s);
 void start_f(string );
 void startMatlab(string);
+void complexExpressionHandler(string s);
 
 #endif /* ASSISTINGFUNCTIONS_H_ */

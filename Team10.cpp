@@ -48,11 +48,14 @@ int main(int argc ,char* argv[])
 		while(1)
 		{
 			std::getline(cin , s);
-			startMatlab(s);
+			start_f(s);
 		}
 	}
     KILLLIST();
     return 0;
 }
+
+
+
 
 
