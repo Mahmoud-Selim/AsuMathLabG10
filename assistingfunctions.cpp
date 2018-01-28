@@ -10,8 +10,8 @@
 #include "linked.h"
 #include "cstdlib"
 #include <string>
-#include "AdvancedMatrixString.h"
-#include "AdvancedNumbersString.h"
+#include "AdvMatrices.h"
+#include "AdvNumbers.h"
 using namespace std;
 
 void extractAndAssign (string s, double** matrix_ptr, unsigned long rowsIterator, unsigned long columnsIterator)
@@ -195,7 +195,7 @@ CMatrix* createAndEvaluate (string s)
      if(j>0 && o<0 && ze<0 && e<0 && r<0)
     {
         operand1 = getOperand1Bracket(s);
-        std::cout<<std::endl<<" "<<operand1<<std::endl;
+        //std::cout<<std::endl<<" "<<operand1<<std::endl;
         if(k>0)
             operand2 = "0.5";
         else if(z>0)
@@ -360,6 +360,14 @@ CMatrix* createAndEvaluate (string s)
 		result_ptr = INSERT(ID , rowsNumber ,columnsNumber);
 		switch (operation)
 		{
+			case addition:
+			case elementWiseAddition:
+				result_ptr-> elementWiseAddition (operand1_ptr , operand2Value);
+				break;
+			case subtraction:
+			case elementWiseSubtraction:
+				result_ptr-> elementWiseSubtraction (operand1_ptr , operand2Value, operationMode);
+				break;
 			case elementWiseDivision:
 				result_ptr->elementWiseDivide(operand1_ptr , operand2Value , operationMode);
 				break;
@@ -368,10 +376,10 @@ CMatrix* createAndEvaluate (string s)
 				result_ptr->elementwisepower(operand1_ptr , operand2Value);
 				break;
 
-            		case Power:
-                 		result_ptr->power(operand1_ptr , operand2Value );
-                 		break;
-				
+            	case Power:
+                	result_ptr->power(operand1_ptr , operand2Value );
+                	break;
+
 	    		case squareRoot:
 				result_ptr->elementwisepower(operand1_ptr , operand2Value);
 				break;
@@ -723,9 +731,7 @@ void startOperation(string s)
 	}
 	string ID = getID(C_S);
 	CMatrix* result_ptr = ISEXISTING(ID);
-	try
-	{
-		if ((int)s.find('=') > 0)
+	if ((int)s.find('=') > 0)
 		{
 			int operation = getOperation(s);
 			if (operation == NoOperation)
@@ -767,13 +773,8 @@ void startOperation(string s)
 				}
 			}
 		}
-	}
-	catch(char const* Error )
-	{
-			std::cout<<Error<<std::endl;
-			return;
-	}
-	if(C_S[strlen(C_S)-1] != ';')
+
+	if(C_S[strlen(C_S)-1] != ';' && ID[0] != '#')
 	{
 		std::cout<<std::endl<<" "<<ID<<" ="<<std::endl;
 		result_ptr->printMatrix();
@@ -848,7 +849,15 @@ void start_f(string lineStr)
 			continue;
 		}
 	}
-	startMatlab(s);
+	try
+	{
+		startMatlab(s);
+	}
+	catch(char const* Error )
+	{
+		std::cout<<Error<<std::endl;
+		//return;
+	}
 	s = "";
 }
 void startMatlab(string str)
@@ -898,12 +907,12 @@ string expressionWhiteSpaceEraser(string s)
 			s.erase(i+1,1);
 			i -= 2;
 		}
-		if((s[i] == '(' || s[i] == '[' ||s[i] == ')' || s[i] == ']' || isOperation(s[i]))&& s[i + 1] == ' ')
+		if((s[i] == '(' || s[i] == '[' || isOperation(s[i]))&& s[i + 1] == ' ')
 		{
 			s.erase(i+1,1);
 			i -= 2;
 		}
-		if((s[i] == '(' || s[i] == '[' ||s[i] == ')' || s[i] == ']'  || isOperation(s[i])) && s[i-1] == ' ')
+		if((s[i] == ')' || s[i] == ']'  || isOperation(s[i])) && s[i-1] == ' ')
 		{
 			s.erase(i-1, 1);
 			i -= 3;
@@ -913,7 +922,10 @@ string expressionWhiteSpaceEraser(string s)
 }
 void complexExpressionHandler(string s)
 {
+	s = Handle1x1Matrices(s);
 	s = expressionWhiteSpaceEraser(s);
+	if(isOperation(s[s.length()-1]))
+		throw("Error... Uncomplete Expression \n");
 	int i, j, k, operation, previousNumberFlag = 0, MatOperation = 0;
 	string accumulator;
 	char previousLetter = s[s.find('[') + 1];
@@ -938,7 +950,9 @@ void complexExpressionHandler(string s)
 				if(k < (int)accumulator.length() - 6)
 				{
 					string tringometricFunction;
-					tringometricFunction = accumulator[k] + accumulator[k+1] + accumulator[k+2];
+					tringometricFunction = accumulator[k];
+					tringometricFunction +=accumulator[k+1];
+					tringometricFunction += accumulator[k+2];
 					if (isTringometric(tringometricFunction))
 						k += 3;
 				}
@@ -949,7 +963,8 @@ void complexExpressionHandler(string s)
 			}
 			if(MatOperation == 1)
 			{
-				string temp = TokenMat(accumulator);
+				string temp = AdoperationMat(" "+accumulator);
+				temp = TokenMat(" "+temp);
 				s.replace(j, i-j, temp);
 				i = i - (i - j) + temp.length();
 				accumulator = "";
@@ -957,7 +972,8 @@ void complexExpressionHandler(string s)
 			}
 			else
 			{
-				string temp = TokenNum(accumulator);
+				string temp = AdoperationNum(" "+accumulator);
+				temp  = TokenNum(" "+temp);
 				s.replace(j, i-j, temp);
 				i = i - (i - j) + temp.length();
 				accumulator = "";
@@ -981,17 +997,33 @@ void complexExpressionHandler(string s)
 		startOperation(s);
 		previousLetter = s[i];*/
 	}
+	else if (operation == ones || operation == zeros || operation == Rand || operation == eye)
+	{
+		startOperation(s);
+	}
 	else
 	{
-		for(i = s.find('=')+1; i < s.length(); i++)
+		for(i = s.find('=')+1; i < (int)s.length(); i++)
 		{
-			if(s[i] == 'A')
+			if(isalpha(s[i]))
 			{
-				AdOperation1Mat(s);
+				if (i < (int)s.length() - 5)
+				{
+					string temp;
+					temp += s[i];
+					temp += s[i+1];
+					temp += s[i+2];
+					if(isTringometric(temp))
+					{
+						i += 6;
+						continue;
+					}
+				}
+				AdOperation1Mat(" "+s);
 				return;
 			}
 		}
-		Adoperation1Num(s);
+		Adoperation1Num(" "+s);
 	}
 }
 

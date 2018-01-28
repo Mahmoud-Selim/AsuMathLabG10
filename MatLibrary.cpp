@@ -1,4 +1,4 @@
-/*
+//*
  * MatLibrary.c
  *
  *  Created on: Oct 24, 2017
@@ -949,8 +949,6 @@
 				}
 			}
 	}
-
-
 		void CMatrix::elementWiseAddition(CMatrix* operand1_ptr , double operand2 )
 	{
 		unsigned long i,j;
@@ -1169,8 +1167,12 @@
 {
 	if ((nR*nC) == 0) { matrix_ptr = NULL; throw ("invalid"); return; }
 
-	//matrix_ptr = new double* [nR];
-
+    if(nR!= this->rowsNumber || nC != this->columnsNumber)
+    {
+    	CMatrix temp(nR,nC);
+    	temp.zeros(nR,nC);
+    	this->copy(&temp);
+    }
 	for (int i = 0; i < nR; i++)
 	{
 		for (int j = 0; j < nC; j++)
@@ -1182,6 +1184,12 @@
 	void CMatrix :: ones (int nR,int nC)
 {
     if ((nR*nC) == 0) { matrix_ptr = NULL; throw ("invalid");return; }
+    if(nR!= this->rowsNumber || nC != this->columnsNumber)
+    {
+    	CMatrix temp(nR,nC);
+    	temp.ones(nR,nC);
+    	this->copy(&temp);
+    }
 	for (int i = 0; i < nR; i++)
 	{
 		for (int j = 0; j < nC; j++)
@@ -1194,7 +1202,13 @@
 	void CMatrix :: Rand (int nR,int nC)
 {
     if ((nR*nC) == 0) { matrix_ptr = NULL; throw ("invalid");return; }
-
+    if(nR!= this->rowsNumber || nC != this->columnsNumber)
+    {
+    	CMatrix temp(nR,nC);
+    	temp.Rand(nR,nC);
+    	this->copy(&temp);
+    	return;
+    }
 	for (int i = 0; i < nR; i++)
 	{
 		for (int j = 0; j < nC; j++)
@@ -1206,6 +1220,12 @@
 void CMatrix :: eye (int nR,int nC)
 {
     if ((nR*nC) == 0||(nR!=nC)) { matrix_ptr = NULL; throw ("invalid");return; }
+    if(nR!= this->rowsNumber || nC != this->columnsNumber)
+    {
+    	CMatrix temp(nR,nC);
+    	temp.eye(nR,nC);
+    	this->copy(&temp);
+    }
 	if (nR==nC&&nC==1)
 	{
 		matrix_ptr [0][0]=1;
@@ -1227,6 +1247,20 @@ else{
 	}
 }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

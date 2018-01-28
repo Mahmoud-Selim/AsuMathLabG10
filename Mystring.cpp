@@ -9,6 +9,9 @@
 #include "MatLibrary.h"
 #include "linked.h"
 #include <cstdlib>
+#include <string>
+#include "string.h"
+#include <string.h>
 string trimString(string s)
 {
 	unsigned long i;
@@ -48,13 +51,23 @@ string trimString(string s)
  */
 string getOperand1( string s)
 {
-	int i =0 ;
+	int i =0, operation = getOperation(s);
+	if(operation == elementWisePower)
+		s = s.substr(0,s.find('^') - 1);
+	else if (operation == elementWiseDivision)
+		s = s.substr(0,s.find('/') - 1);
+	else if(operation == elementWiseMultiplication)
+		s = s.substr(0,s.find('*') - 1);
+	else if(operation == elementWiseAddition)
+		s = s.substr(0,s.find('+') - 1);
+	else if(operation == elementWiseSubtraction)
+		s = s.substr(0,s.find('-') - 1);
 	char *text=new char [s.length()+1];
 	strcpy(text,s.c_str());
 	char *ttext =trim(text);
 	char separators[] = "=+-*/\'^ ";
 	char* token = strtok(ttext, separators);
-	if (getOperation(s) == NoOperation)
+	if (operation == NoOperation)
 	{
 		token  = strtok(NULL , separators);
 		if (ISEXISTING(token))
@@ -63,6 +76,7 @@ string getOperand1( string s)
 		}
 		return "no operand";
 	}
+
 	while(token)
 	{
 		i++;
@@ -97,7 +111,7 @@ string getOperand1( string s)
 
  bool isOperation(char s)
  {
-	 if(s == '+' || s == '-' || s == '*' || s == '/' || s == '.')
+	 if(s == '+' || s == '-' || s == '*' || s == '/' || s == '^')
 		 return 1;
 	 return 0;
  }
@@ -162,7 +176,7 @@ string getOperand2( string s)
 		{
 			if(i==2)
 			{
-				if(*(token-1) == '-')
+				if(*(token-1) == '-' && getOperation(s) != elementWiseSubtraction)
 				token = token -1;
 				return token ;//it will find the second operand in the second iteration
 			}
@@ -184,6 +198,8 @@ int getOperation ( string s )
 	int bracesNumber = 0;
 	for (unsigned int i = 0 ; i < s.length(); i++ )
 	{
+		if(i == s.find('=')+1 && s[i] == '-')
+			i++;
 		if(s[i] == '[')
 			bracesNumber++;
 		else if(s[i] == ']')
@@ -199,7 +215,7 @@ int getOperation ( string s )
 			if ( s[i] == '.' && s[i+1] == '/') {return elementWiseDivision;}
 			if ( s[i] == '.' && s[i+1] == '+') {return elementWiseAddition;}
 			if ( s[i] == '.' && s[i+1] == '-') {return elementWiseSubtraction;}
-				if ( s[i] == '.' && s[i+1] == '^') {return elementWisePower;}
+			if ( s[i] == '.' && s[i+1] == '^') {return elementWisePower;}
 			if ( s[i] == 's' && s[i+1] == 'q' ) { return squareRoot ; }
 			if ( s[i] == 's' && s[i+1] == 'i' && s[i+2] == 'n' ) { return SinFn ; }
 			if ( s[i] == 'c' && s[i+1] == 'o' && s[i+2] == 's') { return CosFn ; }
@@ -413,7 +429,8 @@ int getColumnsNumber (string s)
 	else
 	{
 
-		unsigned int i ,columnsNumber = 0 , concatLength, internalColumnsNumber, internalStringBraces = 0, safeRecursion = 0;
+		unsigned int i ,columnsNumber = 0 , concatLength, internalColumnsNumber, internalStringBraces = 0, safeRecursion = 0;\
+		unsigned int x,y;
 		string row = "" , elementMatrix = "", internalString, ID;
 		CMatrix* elementMatrix_ptr = NULL;
 		ID = getID(s);
@@ -424,7 +441,12 @@ int getColumnsNumber (string s)
 			s = s.substr(1,s.length()-2);
 			s = trimString(s);
 		}
+		x = s.find(']') ;
+		y = s.find('[') ;
+		if(s.find(']') < s.find('[') && s.find(']') != -1 && s.find('['))
+			s = '[' + s + ']';
 		s = '[' + s + ']';
+		//s = '[' + s + ']';
 		for(i = s.find('[')+1 ; i < s.length() - 1 ; i++)
 		{
 			if(s[i - 1] == '[' && s[i] == ' ')
@@ -446,6 +468,7 @@ int getColumnsNumber (string s)
 				row += s[i];
 			}
 		}
+
 		internalString = s.substr(0,s.find('[')+1)+s.substr(s.find('[')+row.length()+2);
 		for(i = 0; i < internalString.length(); i++)
 		{
@@ -454,7 +477,7 @@ int getColumnsNumber (string s)
 				internalStringBraces++;
 			else if(internalString[i] == ']')
 				internalStringBraces--;
-			else if(internalString[i] != ' ' && internalStringBraces == 1)
+			else if(internalString[i] != ' ' && internalStringBraces == 1 || (s.find(']') < s.find('[') && s.find(']') != -1 && s.find('[')))
 			{
 				safeRecursion = 1;
 				break;
@@ -488,7 +511,19 @@ int getColumnsNumber (string s)
 			}
 			else if(row[i] == '[')
 			{
-				concatLength = row.find(']',i)-i+1;
+				internalStringBraces = 1;
+				concatLength = 1;
+				unsigned long j = i+1;
+				while(internalStringBraces != 0)
+				{
+					if(row[j] == '[')
+						internalStringBraces++;
+					if(row[j] == ']')
+						internalStringBraces--;
+					concatLength++;
+					j++;
+				}
+	//			concatLength = row.find(']',i)-i+1;
 				columnsNumber += getColumnsNumber(row.substr(i,concatLength));
 				i += concatLength -1;
 			}
@@ -498,6 +533,43 @@ int getColumnsNumber (string s)
 		return columnsNumber;
 	}
 }
+
+string Handle1x1Matrices(string s)
+{
+	unsigned long i = 0;
+	string result = s;
+	if(s.find("=") == (size_t)-1)
+		return s;
+	s = s.substr(s.find('=')+1);
+	char *C_s = new char[s.length()+1];
+	strcpy(C_s, s.c_str());
+	char delim [] =" .+-*/\[]();0123456789";
+	char *token = strtok(C_s, delim);
+	while(token)
+	{
+		if(isalpha(string(token)[i]))
+		{
+			CMatrix *mat_ptr = ISEXISTING(token);
+			if(mat_ptr)
+			{
+				double **array_ptr = mat_ptr->getMatrixPtr();
+				if(mat_ptr->getRowsNumber() == 1 && mat_ptr->getColumnsNumber() == 1)
+				{
+					unsigned int startPos = result.find(string(token));
+					unsigned int strLen = strlen(token);
+					result = result.substr(0, startPos) +to_string(array_ptr[0][0])+ result.substr(startPos+strLen);
+				}
+			}
+		}
+		token = strtok(NULL, delim);
+		//token = trim(token);
+	}
+	return result;
+}
+
+
+
+
 
 
 

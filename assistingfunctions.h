@@ -13,8 +13,8 @@
 #include <string.h>
 #include <string>
 #include <fstream>
-#include "AdvancedMatrixString.h"
-#include "AdvancedNumbersString.h"
+#include "AdvMatrices.h"
+#include "AdvNumbers.h"
 #include "MatLibrary.h"
 
 using namespace std;
