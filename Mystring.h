@@ -68,6 +68,7 @@ int getColumnsNumber (string s);
  */
 bool isOperation(char s);
 bool isTringometric(string s);
+string Handle1x1Matrices(string);
 
 #endif /* MYSTRING_H_ */
 
