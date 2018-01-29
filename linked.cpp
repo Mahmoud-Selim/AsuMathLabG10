@@ -76,14 +76,18 @@ node *current = NULL;//pointer to the current structure in list
 	void KILLLIST(void)
 		{
 			current = head;
-			if(head->next==NULL && head != NULL)//list is empty
+			if(head != NULL)
 			{
-				delete head->Matrix;
-				return ;
+				if(head->next==NULL)//list is empty
+				{
+					delete head->Matrix;
+					return ;
+				}
+				while(current->next!=NULL)
+				{
+					delete current->Matrix;
+					current=current->next;
+				}
 			}
-			while(current->next!=NULL)
-			{
-				delete current->Matrix;
-				current=current->next;
-			}
+
 		}
