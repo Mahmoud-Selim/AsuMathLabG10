@@ -40,7 +40,7 @@ string AdoperationMat(string s)
 {
 	unsigned long i,j, oneBrace = 0, flag = 0, firstBracePosition;int TrigPos;string Trig;
 	int sinPos=0,cosPos=0,tanPos=0,logPos=0,sqrtPos=0;char text[50];string hash;
-
+	int logCounter=0,logFlag=1; //dol godad
 	string manipulatedString = s;
 	unsigned long sLength = s.length();
 	for (i = 0; i < sLength; i++)
@@ -76,6 +76,35 @@ string AdoperationMat(string s)
 						tanPos=s.find("tan",tanPos);
 						logPos=s.find("log",logPos);
 						sqrtPos=s.find("sqrt",sqrtPos);
+						if(logPos!=-1)//men awel hena gededa
+							{
+								logCounter=	logPos+3;
+								while(logFlag==1)
+									{
+										if(isdigit(s[logCounter])==0)
+										{
+											logFlag=0;
+											if(s[logCounter]=='(')
+											{
+												logFlag=1;
+												break;
+											}
+											else
+											{
+												NumMatrices++;
+												sprintf(text,"%d",NumMatrices);
+												Trig="#"+string(text)+"="+"log"+s.substr(logPos+3,logCounter-(logPos+3))+"("+subString+")";
+												startOperation(Trig);
+												hash = "#"+string(text);
+												s.replace(logPos,logCounter-logPos+subString.length(),hash);
+												logFlag=1;
+												break;
+											}
+										}
+									logCounter++;
+									}
+							logPos++;
+						} //le7ad hna
 						if(s[sinPos+3]!='('&&sinPos!=-1)
 							{
 								NumMatrices++;
@@ -106,7 +135,7 @@ string AdoperationMat(string s)
 								s.replace(tanPos,subString.length()+3,hash);
 								tanPos++;
 							}
-						else if(s[logPos+3]!='('&&logPos!=-1)
+						/*else if(s[logPos+3]!='('&&logPos!=-1)
 							{
 								NumMatrices++;
 								sprintf(text,"%d",NumMatrices);
@@ -115,7 +144,7 @@ string AdoperationMat(string s)
 								hash = "#"+string(text);
 								s.replace(logPos,subString.length()+3,hash);
 								logPos++;
-							}
+							}*/
 						else if(s[sqrtPos+4]!='('&&sqrtPos!=-1)
 							{
 								NumMatrices++;

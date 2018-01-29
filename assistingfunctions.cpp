@@ -924,6 +924,7 @@ void complexExpressionHandler(string s)
 {
 	s = Handle1x1Matrices(s);
 	s = expressionWhiteSpaceEraser(s);
+
 	if(isOperation(s[s.length()-1]))
 		throw("Error... Uncomplete Expression \n");
 	int i, j, k, operation, previousNumberFlag = 0, MatOperation = 0;
@@ -947,7 +948,7 @@ void complexExpressionHandler(string s)
 				continue;
 			for(k = 0; k < accumulator.length(); k++)
 			{
-				if(k < (int)accumulator.length() - 6)
+				if(k < (int)accumulator.length() - 4)
 				{
 					string tringometricFunction;
 					tringometricFunction = accumulator[k];
@@ -955,6 +956,8 @@ void complexExpressionHandler(string s)
 					tringometricFunction += accumulator[k+2];
 					if (isTringometric(tringometricFunction))
 						k += 3;
+					else if(tringometricFunction == "log")
+						k = accumulator.find('(')+1;
 				}
 				if(isalpha(accumulator[k]))
 				{
@@ -1016,6 +1019,11 @@ void complexExpressionHandler(string s)
 					if(isTringometric(temp))
 					{
 						i += 6;
+						continue;
+					}
+					else if(temp == "log")
+					{
+						i = s.find('(', i);
 						continue;
 					}
 				}
