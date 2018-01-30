@@ -17,6 +17,7 @@ using namespace std;
 static int y=0;
 string Adoperation1Num(string s)
 {
+	bool semiColonFlag = s[s.length() - 1] == ';' ? 1 : 0;
 	int equalPos;string newString;int newstrPos;
 	s = AdoperationNum(s);
 	equalPos=s.find("=");
@@ -32,6 +33,9 @@ string Adoperation1Num(string s)
 	{
 		s=TokenNum(s);
 	}
+	if(semiColonFlag)
+		startOperation(s+';');
+	else
 	startOperation(s);
 	return s ;
 }
@@ -69,7 +73,7 @@ string AdoperationNum(string s)
 				if(s[TrigPos-3]>='a'&& s[TrigPos-3]<='z')
 					{
 						Trig=s.substr(TrigPos-3,3);
-						if((Trig=="sin")||(Trig=="cos")||(Trig=="tan")||(Trig=="qrt")||(Trig=="log"));
+						if((Trig=="sin")||(Trig=="cos")||(Trig=="tan")||(Trig=="qrt")||(Trig=="log")||(Trig=="sec")||(Trig=="csc")||(Trig=="cot"));
 							{
 								flagTrig=0;
 								char* buffer = new char[subString.length() + 1];
@@ -98,6 +102,18 @@ string AdoperationNum(string s)
 										trigValue= sqrt(trigValue);
 										flagTrig=1;
 									}
+								else if (Trig=="sec")
+									{
+										trigValue= 1/cos(trigValue);
+									}
+								else if (Trig=="csc")
+									{
+										trigValue = 1 /sin(trigValue);
+									}
+								else if (Trig=="cot")
+									{
+										trigValue =1/tan(trigValue);
+									}
 								if(flagTrig==0)
 									{
 										sprintf(text,"%lf",trigValue);
@@ -118,6 +134,7 @@ string AdoperationNum(string s)
 	}
 	return s;
 }
+
 
 	string trimm(string  text)
 	{
@@ -497,3 +514,4 @@ string DivvNum(string s)
 				}
 				return value;
 	}
+
