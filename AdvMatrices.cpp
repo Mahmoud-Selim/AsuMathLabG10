@@ -41,6 +41,7 @@ string AdoperationMat(string s)
 	unsigned long i,j, oneBrace = 0, flag = 0, firstBracePosition;int TrigPos;string Trig;
 	int sinPos=0,cosPos=0,tanPos=0,logPos=0,sqrtPos=0;char text[50];string hash;
 	int logCounter=0,logFlag=1; //dol godad
+	int cscPos=0,secPos = 0,cotPos=0;
 	string manipulatedString = s;
 	unsigned long sLength = s.length();
 	for (i = 0; i < sLength; i++)
@@ -76,6 +77,9 @@ string AdoperationMat(string s)
 						tanPos=s.find("tan",tanPos);
 						logPos=s.find("log",logPos);
 						sqrtPos=s.find("sqrt",sqrtPos);
+						cscPos=s.find("csc",cscPos);
+						secPos=s.find("sec",secPos);
+						cotPos=s.find("cot",cotPos);
 						if(logPos!=-1)//men awel hena gededa
 							{
 								logCounter=	logPos+3;
@@ -155,14 +159,48 @@ string AdoperationMat(string s)
 								s.replace(sqrtPos,subString.length()+4,hash);
 								sqrtPos++;
 							}
+						else if(s[secPos+3]!='('&&secPos!=-1)
+							{
+								NumMatrices++;
+								sprintf(text,"%d",NumMatrices);
+								Trig="#"+string(text)+"="+s.substr(secPos,3)+"("+subString+")";
+								startOperation(Trig);
+								hash = "#"+string(text);
+								s.replace(secPos,subString.length()+3,hash);
+								secPos++;
+							}
+						else if(s[cscPos+3]!='('&&cscPos!=-1)
+							{
+								NumMatrices++;
+								sprintf(text,"%d",NumMatrices);
+								Trig="#"+string(text)+"="+s.substr(cscPos,3)+"("+subString+")";
+								startOperation(Trig);
+								hash = "#"+string(text);
+								s.replace(cscPos,subString.length()+3,hash);
+								cscPos++;
+							}
+						else if(s[cotPos+3]!='('&&cotPos!=-1)
+							{
+								NumMatrices++;
+								sprintf(text,"%d",NumMatrices);
+								Trig="#"+string(text)+"="+s.substr(cotPos,3)+"("+subString+")";
+								startOperation(Trig);
+								hash = "#"+string(text);
+								s.replace(cotPos,subString.length()+3,hash);
+								cotPos++;
+							}
 
-						if(sinPos==-1&&cosPos==-1&&tanPos==-1&&logPos==-1&&sqrtPos==-1)
+
+						if(sinPos==-1&&cosPos==-1&&tanPos==-1&&logPos==-1&&sqrtPos==-1&&cscPos==-1&&secPos==-1&&cotPos==-1)
 							{
 								sinPos=0;
 								cosPos=0;
 								tanPos=0;
 								logPos=0;
 								sqrtPos=0;
+								cscPos=0;
+								secPos=0;
+								cotPos=0;
 								break;
 							}
 						}

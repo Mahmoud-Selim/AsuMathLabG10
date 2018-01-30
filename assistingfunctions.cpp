@@ -13,12 +13,12 @@
 #include "AdvMatrices.h"
 #include "AdvNumbers.h"
 using namespace std;
+static unsigned int logHandlerCounter = 0;
 
 void extractAndAssign (string s, double** matrix_ptr, unsigned long rowsIterator, unsigned long columnsIterator)
 {
 	unsigned long i, k = 1, increaseRowsBy = 0;
 	unsigned long startingColumn = columnsIterator;
-	//double **matrix_ptr = M->getMatrixPtr();
 	std::string accumlator;
 	for(i = s.find('[') + 1; i < s.length(); i++)
 	{
@@ -33,12 +33,10 @@ void extractAndAssign (string s, double** matrix_ptr, unsigned long rowsIterator
 		else if(s[i] == '[')
 		{
 			k++;
-	//		continue;
 		}
 		else if(s[i] == ']')
 		{
 			k--;
-	//		continue;
 		}
 		else
 		{
@@ -74,8 +72,6 @@ void extractAndAssign (string s, double** matrix_ptr, unsigned long rowsIterator
 		}
 		else if ( k > 1)
 		{
-			//accumlator = s.substr(i,s.find(']',i)-i);
-			//accumlator = s.substr(i+1,s.find(']',i)-i+1);
 			unsigned int accumlatorLength = 0;
 			while(k != 1)
 			{
@@ -95,23 +91,6 @@ void extractAndAssign (string s, double** matrix_ptr, unsigned long rowsIterator
 			unsigned long accumlatorRowsNumber    = getRowsNumber(accumlator);
 			unsigned long accumlatorColumnsNumber = getColumnsNumber(accumlator);
 			extractAndAssign(accumlator, matrix_ptr, rowsIterator, columnsIterator);
-/*			char* Caccumlator = new char[accumlator.length()+1];
-			strcpy(Caccumlator,accumlator.c_str());
-			char separators[] = "], ;";
-			char *token = strtok(Caccumlator, separators);
-			for(unsigned long rowsCounter = 0; rowsCounter < accumlatorRowsNumber; rowsCounter++)
-			{
-				for(unsigned long columnsCounter = 0; columnsCounter < accumlatorColumnsNumber; columnsCounter++)
-				{
-					if(!(rowsCounter == 0 && columnsCounter == 0))
-					{
-						token = strtok(NULL, separators);
-					}
-					matrix_ptr[rowsIterator+rowsCounter][columnsIterator+columnsCounter] = atof(token);
-
-				}
-			}
-			*/
 			columnsIterator += accumlatorColumnsNumber;
 			increaseRowsBy = accumlatorRowsNumber;
 			i += accumlator.length() - 1;
@@ -173,11 +152,6 @@ void assignMatrix (string s)
 
 CMatrix* createAndEvaluate (string s)
 {
-	/*
-	 * -opernadState  specifies which of the operands is double
-	 * -operationMode specifies whether the element wise functions should
-	 *   operate properly of in the inverted mode
-	 */
 	unsigned long i = 0, operandState = None , operationMode , operandValueFlag = 0;
 	double operand1Value,operand2Value;
 	string ID = getID(s);
@@ -195,27 +169,20 @@ CMatrix* createAndEvaluate (string s)
      if(j>0 && o<0 && ze<0 && e<0 && r<0)
     {
         operand1 = getOperand1Bracket(s);
-        //std::cout<<std::endl<<" "<<operand1<<std::endl;
         if(k>0)
             operand2 = "0.5";
         else if(z>0)
         {
-
         operand2=getbase(s);
            if (operand2=="")
                 operand2="2.718281828459";
-
         }
-
         else if(w>0)
             operand2="2.718281828459";
-	    
-	else if (s.find("factorial") != string::npos)
-	    operand2 = "1.0" ;
-
+        else if (s.find("factorial") != string::npos)
+        	operand2 = "1.0" ;
         else
             operand2 = "0";
-
     }
  else if ( o>0 || ze>0 || e>0 || r>0)
     {
@@ -288,29 +255,24 @@ CMatrix* createAndEvaluate (string s)
 				result_ptr = INSERT(ID , rowsNumber ,columnsNumber);
 				result_ptr->add(operand1_ptr , operand2_ptr);
 				break;
-
 			case subtraction:
 				rowsNumber    = operand1_ptr->getRowsNumber();
 				columnsNumber = operand1_ptr->getColumnsNumber();
 				result_ptr = INSERT(ID , rowsNumber ,columnsNumber);
 				result_ptr->subtract(operand1_ptr , operand2_ptr);
 				break;
-
 			case multiplication:
 				rowsNumber    = operand1_ptr->getRowsNumber();
 				columnsNumber = operand2_ptr->getColumnsNumber();
 				result_ptr = INSERT(ID , rowsNumber ,columnsNumber);
 				result_ptr->multiply(operand1_ptr , operand2_ptr);
 				break;
-
 			case division:
 				rowsNumber    = operand1_ptr->getRowsNumber();
 				columnsNumber = operand2_ptr->getColumnsNumber();
 				result_ptr = INSERT(ID , rowsNumber ,columnsNumber);
 				result_ptr->divide(operand1_ptr , operand2_ptr);
 				break;
-
-
 			case transpose:
 				rowsNumber    = operand1_ptr->getColumnsNumber();
 				columnsNumber = operand1_ptr->getRowsNumber();
@@ -330,16 +292,17 @@ CMatrix* createAndEvaluate (string s)
 				result_ptr->elementwisepower(operand1_ptr , operand2_ptr);
 				break;
 			case elementWiseMultiplication:
-				result_ptr-> elementWiseMultiplication (operand1_ptr , operand2Value);
+				rowsNumber    = operand1_ptr->getRowsNumber();
+				columnsNumber = operand1_ptr->getColumnsNumber();
+				result_ptr = INSERT(ID , rowsNumber ,columnsNumber);
+				result_ptr->elementWiseMultiplication(operand1_ptr , operand2_ptr);
 				break;
-				
 			case AND:
 				rowsNumber    = operand1_ptr->getRowsNumber();
 				columnsNumber = operand1_ptr->getColumnsNumber();
 				result_ptr = INSERT(ID , rowsNumber ,columnsNumber);
 				result_ptr-> AND (operand1_ptr , operand2_ptr);
 				break;
-				
 			case OR:
 				rowsNumber    = operand1_ptr->getRowsNumber();
 				columnsNumber = operand1_ptr->getColumnsNumber();
@@ -368,58 +331,49 @@ CMatrix* createAndEvaluate (string s)
 			case elementWiseSubtraction:
 				result_ptr-> elementWiseSubtraction (operand1_ptr , operand2Value, operationMode);
 				break;
+			case multiplication:
+			case elementWiseMultiplication:
+				result_ptr->elementWiseMultiplication(operand1_ptr, operand2Value);
+				break;
 			case elementWiseDivision:
 				result_ptr->elementWiseDivide(operand1_ptr , operand2Value , operationMode);
 				break;
-
 			case elementWisePower:
 				result_ptr->elementwisepower(operand1_ptr , operand2Value);
 				break;
-
-            	case Power:
-                	result_ptr->power(operand1_ptr , operand2Value );
-                	break;
-
-	    		case squareRoot:
-				result_ptr->elementwisepower(operand1_ptr , operand2Value);
+            case Power:
+             	result_ptr->power(operand1_ptr , operand2Value );
+            	break;
+	    	case squareRoot:
+	    		result_ptr->elementwisepower(operand1_ptr , operand2Value);
 				break;
-				
-        		case SinFn:
-				result_ptr->_Sin(operand1_ptr);
+        	case SinFn:
+        		result_ptr->_Sin(operand1_ptr);
 				break;
-				
-            		case CosFn:
+            case CosFn:
 				result_ptr->_Cos(operand1_ptr);
 				break;
-				
-            		case TanFn:
+            case TanFn:
 				result_ptr->_Tan(operand1_ptr);
 				break;
-				
-            		case SecFn:
+            case SecFn:
 				result_ptr->_Sec(operand1_ptr);
 				break;
-				
-            		case CscFn:
+            case CscFn:
 				result_ptr->_Csc(operand1_ptr);
 				break;
-				
-            		case CotFn:
+            case CotFn:
 				result_ptr->_Cot(operand1_ptr);
 				break;
-
-            		case LogFn:
+            case LogFn:
 				result_ptr->_Log(operand1_ptr,operand2Value);
-               			break;
-
-            		case ln:
-               			result_ptr->_Log(operand1_ptr,operand2Value);
-                		break;
-				
-	    		case factorial:
+               	break;
+            case ln:
+            	result_ptr->_Log(operand1_ptr,operand2Value);
+                break;
+	    	case factorial:
 				result_ptr-> factorial (operand1_ptr );
 				break;
-
 		}
 	}
 	else if (operandState == Both)
@@ -437,25 +391,24 @@ CMatrix* createAndEvaluate (string s)
 if (o>0|| ze>0|| e>0|| r>0)
     {
         int operation = getOperation(s);
-		//result_ptr = INSERT(ID , getRowsNumber(s) , getColumnsNumber(s));
         switch (operation)
         {
             case eye:
-		result_ptr = INSERT(ID , getRowsNumber(s)  ,getColumnsNumber(s));
-		result_ptr->eye(getRowsNumber(s) , getColumnsNumber(s));
-		break;
+            	result_ptr = INSERT(ID , getRowsNumber(s)  ,getColumnsNumber(s));
+            	result_ptr->eye(getRowsNumber(s) , getColumnsNumber(s));
+            	break;
             case zeros:
-		result_ptr = INSERT(ID , getRowsNumber(s) ,getColumnsNumber(s));
+            	result_ptr = INSERT(ID , getRowsNumber(s) ,getColumnsNumber(s));
                 result_ptr->zeros(getRowsNumber(s) , getColumnsNumber(s));
                 break;
             case ones:
-		result_ptr = INSERT(ID , getRowsNumber(s) ,getColumnsNumber(s));
-		result_ptr->ones(getRowsNumber(s) , getColumnsNumber(s));
-		break;
+            	result_ptr = INSERT(ID , getRowsNumber(s) ,getColumnsNumber(s));
+            	result_ptr->ones(getRowsNumber(s) , getColumnsNumber(s));
+            	break;
             case Rand:
-		result_ptr = INSERT(ID , getRowsNumber(s) ,getColumnsNumber(s));
-		result_ptr->Rand(getRowsNumber(s) , getColumnsNumber(s));
-		break;
+            	result_ptr = INSERT(ID , getRowsNumber(s) ,getColumnsNumber(s));
+            	result_ptr->Rand(getRowsNumber(s) , getColumnsNumber(s));
+            	break;
         }
     }
 	return result_ptr;
@@ -495,18 +448,14 @@ void Evaluate (string s)
             operand2=getbase(s);
            if (operand2=="")
                 operand2="2.718281828459";
-
-
         }
         else if(w>0)
             operand2="2.718281828459";
 		
-	else if (s.find("factorial") != string::npos)
-	    operand2 = "1.0" ;
-		
+        else if (s.find("factorial") != string::npos)
+        	operand2 = "1.0" ;
         else
             operand2 = "0";
-
     }
 else if ( o>0 || ze>0 || e>0 || r>0)
     {
@@ -545,7 +494,6 @@ else if ( o>0 || ze>0 || e>0 || r>0)
 	{
 		if (operandState == Operand1)
 		{
-//			operandState == Both;
 			i = 0;
 		}
 		else
@@ -560,48 +508,41 @@ else if ( o>0 || ze>0 || e>0 || r>0)
 			operandValueFlag = 0;
 		}
 	}
-	if (operandState == Operand1)
-	{
-		operand2Value = operand1Value;
-		operand1 = operand2;
-		operationMode = InvertedOperation;
-		operandState = Operand2;
-	}
-	if (operandState == None)
-	{
-		CMatrix* operand1_ptr = ISEXISTING(operand1);
-		CMatrix* operand2_ptr = ISEXISTING(operand2);
-		int operation = getOperation(s);
+		if (operandState == Operand1)
+		{
+			operand2Value = operand1Value;
+			operand1 = operand2;
+			operationMode = InvertedOperation;
+			operandState = Operand2;
+		}
+		if (operandState == None)
+		{
+			CMatrix* operand1_ptr = ISEXISTING(operand1);
+			CMatrix* operand2_ptr = ISEXISTING(operand2);
+			int operation = getOperation(s);
 		switch (operation)
 		{
 			case addition:
 				result_ptr->add(operand1_ptr , operand2_ptr);
 				break;
-				
 			case subtraction:
 				result_ptr->subtract(operand1_ptr , operand2_ptr);
 				break;
-				
 			case multiplication:
 				result_ptr->multiply(operand1_ptr , operand2_ptr);
 				break;
-				
 			case division:
 				result_ptr->divide(operand1_ptr , operand2_ptr);
 				break;
-				
 			case transpose:
 				result_ptr->transpose(operand1_ptr);
 				break;
-				
 			case elementWiseDivision:
 				result_ptr->elementWiseDivide(operand1_ptr , operand2_ptr);
 				break;
-				
 			case elementWisePower:
 				result_ptr->elementwisepower(operand1_ptr , operand2_ptr);
 				break;
-				
 			case AND:
 				result_ptr->AND(operand1_ptr , operand2_ptr);
 				break;
@@ -621,70 +562,52 @@ else if ( o>0 || ze>0 || e>0 || r>0)
 		{
 			case elementWiseDivision:
 				result_ptr->elementWiseDivide(operand1_ptr , operand2Value , operationMode);
-                		break;
-				
-            		case elementWisePower:
-                 		result_ptr->elementwisepower(operand1_ptr , operand2Value );
-                 		break;
+				break;
+			case elementWisePower:
+				result_ptr->elementwisepower(operand1_ptr , operand2Value );
+            	break;
+			case Power:
+				result_ptr->power(operand1_ptr , operand2Value );
+				break;
+			case addition:
 			case elementWiseAddition:
 				result_ptr-> elementWiseAddition (operand1_ptr , operand2Value);
 				break;
-			case elementWiseSubtraction:	
-				result_ptr-> elementWiseSubtraction (operand1_ptr , operand2Value, operationMode);
-				break;
-				
-            		case Power:
-                 		result_ptr->power(operand1_ptr , operand2Value );
-                 		break;
-				
-			case addition:
-				result_ptr-> elementWiseAddition (operand1_ptr , operand2Value);
-				break;
-				
 			case subtraction:	
+			case elementWiseSubtraction:
 				result_ptr-> elementWiseSubtraction (operand1_ptr , operand2Value, operationMode);
 				break;
-				
+			case multiplication:
 			case elementWiseMultiplication:
-				result_ptr-> elementWiseMultiplication (operand1_ptr , operand2Value);
-				break;	
-				
-            		case squareRoot:
-                 		result_ptr->elementwisepower(operand1_ptr , operand2Value );
-                 		break;
-				
-            		case SinFn:
+				result_ptr->elementWiseMultiplication(operand1_ptr, operand2Value);
+				break;
+			case squareRoot:
+				result_ptr->elementwisepower(operand1_ptr , operand2Value );
+                break;
+            case SinFn:
 				result_ptr->_Sin(operand1_ptr);
 				break;
-				
-            		case CosFn:
+            case CosFn:
 				result_ptr->_Cos(operand1_ptr);
 				break;
-				
-            		case TanFn:
+            case TanFn:
 				result_ptr->_Tan(operand1_ptr);
 				break;
-				
-            		case SecFn:
+            case SecFn:
 				result_ptr->_Sec(operand1_ptr);
 				break;
-				
-            		case CscFn:
+            case CscFn:
 				result_ptr->_Csc(operand1_ptr);
 				break;
-				
-            		case CotFn:
+            case CotFn:
 				result_ptr->_Cot(operand1_ptr);
 				break;
-
-            		case LogFn:
+            case LogFn:
 				result_ptr->_Log(operand1_ptr,operand2Value);
-                		break;
-
-            		case ln:
-                		result_ptr->_Log(operand1_ptr,operand2Value);
-                		break;
-				
+                break;
+            case ln:
+            	result_ptr->_Log(operand1_ptr,operand2Value);
+                break;
 			case factorial:
 				result_ptr-> factorial (operand1_ptr );
 				break;
@@ -699,25 +622,25 @@ else if ( o>0 || ze>0 || e>0 || r>0)
                  result_ptr->power(operand1Value , operand2Value );
         }
 	}
-if  (o>0|| ze>0|| e>0|| r>0)
-    {
-        int operation = getOperation(s);
-        switch (operation)
-        {
-            case eye:
-		result_ptr->eye(getRowsNumber(s) , getColumnsNumber(s));
-		break;
-            case zeros:
-                result_ptr->zeros(getRowsNumber(s) , getColumnsNumber(s));
-                break;
-            case ones:
-		result_ptr->ones(getRowsNumber(s) , getColumnsNumber(s));
-		break;
-            case Rand:
-		result_ptr->Rand(getRowsNumber(s) , getColumnsNumber(s));
-		break;
-        }
-    }
+	if  (o>0|| ze>0|| e>0|| r>0)
+		{
+			int operation = getOperation(s);
+			switch (operation)
+			{
+				case eye:
+					result_ptr->eye(getRowsNumber(s) , getColumnsNumber(s));
+					break;
+				case zeros:
+					result_ptr->zeros(getRowsNumber(s) , getColumnsNumber(s));
+					break;
+				case ones:
+					result_ptr->ones(getRowsNumber(s) , getColumnsNumber(s));
+					break;
+				case Rand:
+			result_ptr->Rand(getRowsNumber(s) , getColumnsNumber(s));
+			break;
+			}
+		}
 }
 void startOperation(string s)
 {
@@ -811,10 +734,6 @@ void start_f(string lineStr)
 	{
 		return;
 	}
-/*	if ( (s.find('[') != (size_t)-1) && (s.find(']') ==(size_t) -1) )
-	{
-		return;
-	}*/
 	for( i = 0 ; i < (unsigned long)s.length() ; i++)
 	{
 		if(s[i] == '[')
@@ -835,7 +754,6 @@ void start_f(string lineStr)
 				missingbracelinestr = 1;
 				return;
 			}
-
 		}
 	}
 	for(i = s.length()-1 ; i > 0 ; i--)
@@ -856,46 +774,36 @@ void start_f(string lineStr)
 	catch(char const* Error )
 	{
 		std::cout<<Error<<std::endl;
-		//return;
 	}
 	s = "";
 }
 void startMatlab(string str)
 {
-	    //////////////// intialization
-		int StartPos=0; //starting position for command
-		int SemiPos=0; //pos for semi colon
-		string str1;   //the new string which contains only 1 command
-		int counter =0; // counter to count number of '='
+		int StartPos=0;
+		int SemiPos=0;
+		string str1;
+		int counter =0;
 		int i =0;
-		////////////////
-
-
-	int strlength=str.length();// length of origin string
+		int strlength=str.length();
 		for(i=0;i<strlength;i++)
 		{
 			if(str[i]=='=')
 			{
 
-				if(counter>=1) // checking for muli command
+				if(counter>=1)
 				{
-					SemiPos =str.rfind(';',i); // parameters of .find(character to find ,starting pos)
-					str1=str.substr(StartPos,SemiPos+1-StartPos);//subtring (start position ,number of elements )
-					//which is pos of ';' - start position
-
-					StartPos=SemiPos+1; // new start postion is last ';' postion
-
-					complexExpressionHandler(str1); // call startOperation
+					SemiPos =str.rfind(';',i);
+					str1=str.substr(StartPos,SemiPos+1-StartPos);
+					StartPos=SemiPos+1;
+					complexExpressionHandler(str1);
 				}
-
 				counter++;
 			}
 		}
-		// getting last command
-		int y=str.rfind('=',strlength); //finding last command
-		int z =str.rfind(';',y); //finding the last ';' before last command
-		str1=str.substr(z+1,strlength-z); // getting last command
-		complexExpressionHandler(str1); //call startOperation for last command
+		int y=str.rfind('=',strlength);
+		int z =str.rfind(';',y);
+		str1=str.substr(z+1,strlength-z);
+		complexExpressionHandler(str1);
 }
 string expressionWhiteSpaceEraser(string s)
 {
@@ -920,11 +828,62 @@ string expressionWhiteSpaceEraser(string s)
 	}
 	return s;
 }
+
+
+string LogHandler(string s)
+{
+	static int firstTime = 0;
+	string constID = "#LogHandler";
+	CMatrix *constMat_ptr;
+	if(firstTime == 0)
+	{
+		constMat_ptr= INSERT(constID,1,1);
+		firstTime++;
+	}
+	unsigned int i = 0,j = 0;
+	string operand , operation;
+	while ((int)s.find("log") > 0)
+	{
+		string breaker = s;
+		i = s.find("log");
+		j = s.find('(',i);
+		operand = s.substr(j+1,s.find(')', j)-s.find('(', j) - 1);
+		if(isdigit(operand[0]))
+		{
+			operand  = AdoperationNum(operand);
+			operand = TokenNum(operand);
+			CMatrix *temp,*result_ptr;
+			double** array_ptr;
+			double** resultMatrix_ptr;
+
+			string ID = "#LogHandler" ;
+			ID = ID + to_string(logHandlerCounter++);
+			temp = INSERT(ID,1,1);
+			array_ptr = temp->getMatrixPtr();
+			array_ptr[0][0] = atof(operand.c_str());
+			operation  =  " #LogHandler = log" + s.substr(i+3,j-i-3) + "("+ ID + ")";
+			operation  = AdoperationMat(operation);
+			operation = TokenMat(operation);
+			operation  = "#LogHandler = "+operation.substr(operation.find("=")+1);
+			startOperation(operation );
+			result_ptr = ISEXISTING("#LogHandler");
+			resultMatrix_ptr = result_ptr->getMatrixPtr();
+			double value = resultMatrix_ptr[0][0];
+			s = s.substr(0,i-1)+to_string(value)+s.substr(s.find(')')+1,i);
+		}
+		if(s == breaker)
+			break;
+	}
+	return s;
+}
+
+
+
 void complexExpressionHandler(string s)
 {
 	s = Handle1x1Matrices(s);
 	s = expressionWhiteSpaceEraser(s);
-
+	s = LogHandler(s);
 	if(isOperation(s[s.length()-1]))
 		throw("Error... Uncomplete Expression \n");
 	int i, j, k, operation, previousNumberFlag = 0, MatOperation = 0;
@@ -935,8 +894,6 @@ void complexExpressionHandler(string s)
 	{
 		for(i = s.find('[')+1; i < s.length(); i++)
 		{
-			//if(s[i] == '[' || s[i] == ']' || s[i] == ';' || s[i] == ',')
-				//continue;
 			if(s[i] != ' ' && !(s[i] == '[' || s[i] == ']' || s[i] == ';' || s[i] == ','))
 			{
 				if (accumulator == "")
@@ -983,22 +940,6 @@ void complexExpressionHandler(string s)
 			}
 		}
 		startOperation(s);
-		/*if(MatOperation == 1)
-		{
-			string temp = TokenMat(accumulator);
-			s.replace(j, j-i, temp);
-			i = i - (j - i) + temp.length();
-			accumulator = "";
-		}
-		else
-		{
-			string temp = TokenNum(accumulator);
-			s.replace(j, i-j, temp);
-			i = i - (i - j) + temp.length();
-			accumulator = "";
-		}
-		startOperation(s);
-		previousLetter = s[i];*/
 	}
 	else if (operation == ones || operation == zeros || operation == Rand || operation == eye)
 	{
@@ -1018,7 +959,7 @@ void complexExpressionHandler(string s)
 					temp += s[i+2];
 					if(isTringometric(temp))
 					{
-						i += 6;
+						i += 3;
 						continue;
 					}
 					else if(temp == "log")
@@ -1034,5 +975,8 @@ void complexExpressionHandler(string s)
 		Adoperation1Num(" "+s);
 	}
 }
+
+
+
 
 
